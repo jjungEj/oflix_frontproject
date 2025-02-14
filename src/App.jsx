@@ -1,48 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import Reservation from './Reservation'
-import './App.css'
+
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Join from "./pages/Join";
+import User from "./pages/User";
+import Home from "./pages/Home";
+import Admin from "./pages/Admin";
+import Header from './components/Header/Header';
+
+import LoginContextProvider from "./contexts/LoginContextProvider";
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <Router>
-      <nav>
-        <Link to="/">Home</Link> | <Link to="/reservation">예매하기</Link>
-      </nav>
-      
-      <Routes>
-        <Route path="/reservation" element={<Reservation />} />
-        <Route path="/" element={
-          <>
-            <div>
-              <a href="https://vite.dev" target="_blank">
-                <img src={viteLogo} className="logo" alt="Vite logo" />
-              </a>
-              <a href="https://react.dev" target="_blank">
-                <img src={reactLogo} className="logo react" alt="React logo" />
-              </a>
-            </div>
-            <h1>Vite + React</h1>
-            <div className="card">
-              <button onClick={() => setCount((count) => count + 1)}>
-                count is {count}
-              </button>
-              <p>
-                Edit <code>src/App.jsx</code> and save to test HMR
-              </p>
-            </div>
-            <p className="read-the-docs">
-              Click on the Vite and React logos to learn more
-            </p>
-          </>
-        } />
-      </Routes>
+      <LoginContextProvider>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/join" element={<Join />} />
+
+
+
+          <Route path="/user" element={<User />}>
+            <Route path="mypage" element={<User />} /> {/* 상대 경로 사용 */}
+          </Route>
+
+
+          <Route path="/admin" element={<Admin />}>
+            <Route path="adminpage" element={<Admin />} /> {/* 상대 경로 사용 */}
+          </Route>
+
+        </Routes>
+      </LoginContextProvider>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;

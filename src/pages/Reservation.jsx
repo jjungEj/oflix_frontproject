@@ -14,20 +14,6 @@ export default function Reservation() {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedSeatInfo, setSelectedSeatInfo] = useState(null);
 
-  // 영화관 정보 API 호출
-  // useEffect(() => {
-  //   const fetchCinemas = async () => {
-  //     try {
-  //       const response = await fetch('/cinemas');
-  //       const data = await response.json();
-  //       setCinemas(data.cinemas);
-  //     } catch (error) {
-  //       console.error('Error fetching cinemas:', error);
-  //     }
-  //   };
-  //   fetchCinemas();
-  // }, []);
-
   useEffect(() => {
     fetch("http://localhost:8080/api/schedules")
       .then((response) => response.json())

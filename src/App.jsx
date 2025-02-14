@@ -5,7 +5,7 @@ import Join from "./pages/Join";
 import User from "./pages/User";
 import Home from "./pages/Home";
 import Admin from "./pages/Admin";
-import Reservation from './Reservation'
+import Reservation from './pages/Reservation'
 import Header from './components/Header/Header';
 
 import LoginContextProvider from "./contexts/LoginContextProvider";

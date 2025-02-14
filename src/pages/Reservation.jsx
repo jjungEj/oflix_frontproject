@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "./styles.css";
+import "../styles.css";
 
 export default function Reservation() {
   const [selectedCinema, setSelectedCinema] = useState(null);

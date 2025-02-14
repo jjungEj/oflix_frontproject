@@ -13,17 +13,20 @@ const Header = () => {
                     <img src="" alt="logo" className="logo" />
                 </Link>
             </div>
-
+        
             <div className="util">
+
                 {
                     !isLogin ? (
                         <ul>
+                            <li><Link to="/reservation">예매하기</Link></li>
                             <li><Link to="/">메인페이지</Link></li>
                             <li><Link to="/login">로그인</Link></li>
                             <li><Link to="/join">회원가입</Link></li>
                         </ul>
                     ) : (
                         <ul>
+                            <li><Link to="/reservation">예매하기</Link></li>
                             <li><Link to="/user">마이페이지</Link></li>
                             <li><button className="link" onClick={logout}>로그아웃</button></li>
                         </ul>

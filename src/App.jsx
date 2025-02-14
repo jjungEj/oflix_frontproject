@@ -2,7 +2,7 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import Test from '../src/test'
+import Reservation from './Reservation'
 import './App.css'
 
 function App() {
@@ -11,11 +11,11 @@ function App() {
   return (
     <Router>
       <nav>
-        <Link to="/">Home</Link> | <Link to="/test">Test</Link>
+        <Link to="/">Home</Link> | <Link to="/reservation">예매하기</Link>
       </nav>
       
       <Routes>
-        <Route path="/test" element={<Test />} />
+        <Route path="/reservation" element={<Reservation />} />
         <Route path="/" element={
           <>
             <div>

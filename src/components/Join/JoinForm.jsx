@@ -12,7 +12,7 @@ const JoinForm = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:8080/api/user/join", {
+            const response = await fetch("/api/user/join", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

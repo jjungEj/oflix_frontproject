@@ -11,15 +11,12 @@ const LoginContextProvider = ({ children }) => {
 
    
     const logout = () => {
-        localStorage.removeItem('token');
-        setLogin(false);
-        setUserInfo({});
+        
     };
 
     
     useEffect(() => {
-        const token = localStorage.getItem('token');
-
+        
         if (token) {
             
             setLogin(true);

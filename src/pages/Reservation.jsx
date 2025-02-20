@@ -594,7 +594,7 @@ const seatNumber = (index + 1).toString();
                   <span className="ticket-type-price">{type.price.toLocaleString()}원</span>
                 </button>
               ))}
-            </div>
+            </div> 
             <button 
               className="popup-close"
               onClick={handlePopupClose}

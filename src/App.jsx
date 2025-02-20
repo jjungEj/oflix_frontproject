@@ -7,9 +7,10 @@ import Home from "./pages/Home";
 import Admin from "./pages/Admin";
 import Reservation from './pages/Reservation'
 import Header from './components/Header/Header';
-
+import "./components/css/global.css";
+import "./components/font/gfont.css";
 import LoginContextProvider from "./contexts/LoginContextProvider";
-import './App.css';
+
 
 function App() {
   return (

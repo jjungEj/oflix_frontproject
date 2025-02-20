@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import "../styles.css";
 
 export default function Reservation() {
   const [selectedCinema, setSelectedCinema] = useState(null);
@@ -15,7 +14,7 @@ export default function Reservation() {
   const [selectedSeatInfo, setSelectedSeatInfo] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/schedules")
+    fetch("/api/schedules")
       .then((response) => response.json())
       .then((response) => {
         console.log("API Response:", response);

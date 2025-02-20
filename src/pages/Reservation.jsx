@@ -1,74 +1,117 @@
 import { useState, useEffect } from "react";
 
+// 결제 수단 상수 추가
+const PAYMENT_METHODS = [
+  { id: 'naver', name: '네이버페이', icon: '네이버페이_아이콘_URL' },
+  { id: 'kakao', name: '카카오페이', icon: '카카오페이_아이콘_URL' },
+  { id: 'card', name: '신용카드', icon: '신용카드_아이콘_URL' },
+];
+
 export default function Reservation() {
   const [selectedCinema, setSelectedCinema] = useState(null);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const [selectedDate, setSelectedDate] = useState("2025-02-04");
-  const [selectedTime, setSelectedTime] = useState(null);
+    const [selectedTime, setSelectedTime] = useState(null);
   const [currentStep, setCurrentStep] = useState(1);
   const [cinemas, setCinemas] = useState([]);
-  const [movies, setMovies] = useState({});
-  const [isLoading, setIsLoading] = useState(true);  // 로딩 상태
+const [movies, setMovies] = useState({});
+  const [isDataFetching, setIsDataFetching] = useState(false);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [selectedSeatInfo, setSelectedSeatInfo] = useState(null);
+const [selectedTickets, setSelectedTickets] = useState([]);  
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
+
+  const TICKET_TYPES = [
+    { id: 'adult', name: '일반', price: 13000 },
+    { id: 'youth', name: '청소년', price: 10000 },
+    { id: 'child', name: '어린이', price: 7000 },
+  ];
+
+  // 스케줄 데이터를 영화 스케줄 객체로 변환
+  const createScheduleObject = (schedule) => ({
+    id: schedule.scheduleId,
+    startTime: schedule.startTime,
+    endTime: schedule.endTime,
+    remainingSeats: schedule.remainingSeats,
+    totalSeats: schedule.totalSeats
+  });
+
+  // 영화 데이터를 영화 객체로 변환
+  const createMovieObject = (schedule) => ({
+    id: schedule.scheduleId,
+    title: schedule.title,
+    poster: schedule.posterUrl,
+    schedules: [createScheduleObject(schedule)]
+  });
+
+  // 영화관 데이터를 영화관 객체로 변환
+  const createCinemaObject = (schedule) => ({
+    id: schedule.cinemaId,
+    name: schedule.cinemaName,
+    location: schedule.cinemaLocation,
+    movies: []
+  });
+
+  // 스케줄을 영화관별로 그룹화하고 데이터 구조화
+  const processSchedules = (schedules) => {
+    // 먼저 영화관별로 그룹화
+    const groupedByCinema = schedules.reduce((cinemas, schedule) => {
+      if (!cinemas[schedule.cinemaId]) {
+        cinemas[schedule.cinemaId] = createCinemaObject(schedule);
+      }
+      return cinemas;
+    }, {});
+
+    // 그룹화된 영화관에 영화와 스케줄 추가
+    schedules.forEach(schedule => {
+      const cinema = groupedByCinema[schedule.cinemaId];
+      const movieIndex = cinema.movies.findIndex(m => m.title === schedule.title);
+
+      if (movieIndex === -1) {
+        // 새로운 영화 추가
+        cinema.movies.push({
+          id: schedule.scheduleId,
+          title: schedule.title,
+          poster: schedule.posterUrl,
+          schedules: [createScheduleObject(schedule)]
+        });
+      } else {
+        // 기존 영화의 스케줄이 중복되지 않도록 체크
+        const existingSchedules = cinema.movies[movieIndex].schedules;
+        const scheduleExists = existingSchedules.some(
+          s => s.id === schedule.scheduleId
+        );
+
+        if (!scheduleExists) {
+          existingSchedules.push(createScheduleObject(schedule));
+        }
+      }
+    });
+
+    return groupedByCinema;
+  };
 
   useEffect(() => {
-    fetch("/api/schedules")
-      .then((response) => response.json())
-      .then((response) => {
-        console.log("API Response:", response);
+    const fetchSchedules = async () => {
+      setIsDataFetching(true);
+      try {
+        const response = await fetch("http://localhost:8080/api/schedules");
+        const data = await response.json();
 
-        // 응답이 배열인지 확인
-        if (!Array.isArray(response)) {
+        if (!Array.isArray(data)) {
           throw new Error('Invalid API response format');
         }
 
-        // Process the schedules to organize by cinema
-        const cinemasData = response.reduce((acc, schedule) => {
-          const cinemaId = schedule.cinemaId;
-          if (!acc[cinemaId]) {
-            acc[cinemaId] = {
-              id: cinemaId,
-              name: schedule.cinemaName,
-              location: schedule.cinemaLocation,
-              movies: []
-            };
-          }
-
-          // 영화 정보 처리
-          const movie = acc[cinemaId].movies.find(m => m.title === schedule.title);
-          if (movie) {
-            movie.schedules.push({
-              id: schedule.scheduleId,
-              startTime: schedule.startTime,
-              endTime: schedule.endTime,
-              remainingSeats: schedule.remainingSeats
-            });
-          } else {
-            acc[cinemaId].movies.push({
-              id: schedule.scheduleId, // 또는 별도의 movieId가 필요할 수 있음
-              title: schedule.title,
-              poster: schedule.posterUrl,
-              schedules: [{
-                id: schedule.scheduleId,
-                startTime: schedule.startTime,
-                endTime: schedule.endTime,
-                remainingSeats: schedule.remainingSeats
-              }]
-            });
-          }
-
-          return acc;
-        }, {});
-
-        setCinemas(Object.values(cinemasData));
-        setIsLoading(false);
-      })
-      .catch((error) => {
+        const processedData = processSchedules(data);
+        setCinemas(Object.values(processedData));
+      } catch (error) {
         console.error("Error fetching schedules:", error.message);
-        setIsLoading(false);
-      });
+      } finally {
+        setIsDataFetching(false);
+      }
+    };
+
+    fetchSchedules();
   }, []);
 
   const handleNextStep = () => {
@@ -81,34 +124,184 @@ export default function Reservation() {
     return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
   };
 
-  const generateSeatLabel = (index) => {
-    const row = String.fromCharCode(65 + Math.floor(index / 10));
-    const col = (index % 10) + 1;
-    return `${row}${col}`;
+  const generateSeatLabel = (seatNumber) => {
+        return seatNumber.toString();
   };
 
   const handleSeatClick = (seatIndex) => {
     const seatLabel = generateSeatLabel(seatIndex);
     setSelectedSeatInfo({
       label: seatLabel,
-      index: seatIndex
+      index: seatIndex,
+      ticketType: null
     });
+setSelectedSeats([...selectedSeats, seatIndex]);
     setShowPopup(true);
+  };
+
+  const handleTicketTypeSelect = (ticketType) => {
+    setSelectedTickets([...selectedTickets, {
+      seatIndex: selectedSeatInfo.index,
+      seatLabel: selectedSeatInfo.label,
+      ticketType: ticketType
+    }]);
+    setShowPopup(false);
+  };
+
+  const handlePopupClose = () => {
+    
+    setSelectedSeats(selectedSeats.filter(seatIndex => seatIndex !== selectedSeatInfo.index));
+    setShowPopup(false);
+  };
+
+  const calculateTotalPrice = () => {
+    return selectedTickets.reduce((sum, ticket) => sum + ticket.ticketType.price, 0);
+  };
+
+  // 결제 성공 처리 함수
+  const handlePaymentSuccess = async (paymentData) => {
+    try {
+      // 서버로 전송할 결제 정보
+      const paymentInfo = {
+        paymentId: paymentData.paymentId,
+        resultCode: paymentData.resultCode,
+        movieId: selectedMovie?.id,
+        movieTitle: selectedMovie?.title,
+        seats: selectedSeats,
+        tickets: selectedTickets,
+        totalAmount: calculateTotalPrice(),
+        paymentMethod: 'naver'
+      };
+
+      // 서버로 결제 정보 전송
+      const response = await fetch('http://localhost:8080/api/payment/complete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          paymentInfo
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('서버 처리 중 오류가 발생했습니다.');
+      }
+
+      const result = await response.json();
+      alert('결제가 성공적으로 완료되었습니다.');
+    } catch (error) {
+      console.error('결제 처리 중 오류:', error.message);
+      alert('결제 처리 중 오류가 발생했습니다.');
+    }
+  };
+
+  // 네이버페이 설정
+  useEffect(() => {
+    // 이미 스크립트가 로드되어 있다면 다시 로드하지 않음
+    if (document.getElementById('naver-pay-sdk')) {
+      return;
+    }
+
+    // 네이버페이 SDK 스크립트 로드
+    const script = document.createElement('script');
+    script.id = 'naver-pay-sdk';
+    script.src = 'https://nsp.pay.naver.com/sdk/js/naverpay.min.js';
+    script.async = true;
+
+    // 스크립트 로드 완료 후 네이버페이 초기화
+    script.onload = () => {
+      if (window.Naver) {
+        window.oPay = window.Naver.Pay.create({
+          mode: "development",
+          clientId: "HN3GGCMDdTgGUfl0kFCo",
+          chainId: "S3pWdDdoa3VQR0h"
+        });
+      }
+    };
+
+    document.body.appendChild(script);
+
+    // 컴포넌트 언마운트 시 스크립트 제거
+    return () => {
+      const scriptElement = document.getElementById('naver-pay-sdk');
+      if (scriptElement) {
+        scriptElement.remove();
+      }
+    };
+  }, []);
+
+  // 네이버페이 결제 처리 함수
+  const handleNaverPayment = () => {
+    if (!window.oPay) {
+      console.error('네이버페이가 초기화되지 않았습니다.');
+      return;
+    }
+
+    try {
+      const totalAmount = calculateTotalPrice();
+      const merchantPayKey = `OFLIX_${Date.now()}`; // 고유한 주문번호 생성
+
+      window.oPay.open({
+        merchantPayKey: merchantPayKey,
+        productName: selectedMovie ? `${selectedMovie.title} 영화티켓` : "영화티켓",
+        productCount: String(selectedSeats.length),
+        totalPayAmount: String(totalAmount),
+        taxScopeAmount: String(totalAmount),
+        taxExScopeAmount: "0",
+        returnUrl: "http://localhost:5173/paymentsuccess",
+        onAuthorize: async function(response) {
+          console.log('Payment authorized:', response);
+          if (response.resultCode === 'Success') {
+            // 결제 성공 시 서버로 데이터 전송
+            await handlePaymentSuccess(response);
+          } else {
+            // 결제 실패 시 처리
+            alert('결제에 실패했습니다.');
+          }
+        }
+      });
+    } catch (error) {
+      console.error('네이버페이 결제 처리 중 오류:', error);
+      alert('결제 처리 중 오류가 발생했습니다.');
+    }
+  };
+
+  // 결제하기 버튼 클릭 핸들러
+  const handlePaymentClick = () => {
+    if (!selectedPaymentMethod) {
+      alert("결제 수단을 선택해주세요.");
+      return;
+    }
+
+    // 선택된 결제 수단에 따라 처리
+    switch (selectedPaymentMethod) {
+      case 'naver':
+        handleNaverPayment();
+        break;
+      case 'kakao':
+        handleKakaoPayment();
+        break;
+      default:
+        alert("지원하지 않는 결제 수단입니다.");
+    }
   };
 
   return (
     <div className="container">
-      <header className="header">
+      <header className="reservation_header">
         <h1>예매하기</h1>
       </header>
       <div className="menu">
         <div className={currentStep === 1 ? "active" : ""}>상영시간</div>
         <div className={currentStep === 2 ? "active" : ""}>인원/좌석</div>
-        <div>결제하기</div>
+        <div className={currentStep === 3 ? "active" : ""}>결제하기</div>
       </div>
 
-      {isLoading ? (
-        <div>로딩 중...</div>
+      {isDataFetching ? (
+        <div className="loading-container">
+          <p>데이터를 불러오는 중입니다...</p>
+    </div>
       ) : currentStep === 1 ? (
         <>
           <div className="content">
@@ -119,7 +312,11 @@ export default function Reservation() {
                   <li
                     key={cinema.id}
                     className={selectedCinema?.id === cinema.id ? "selected" : ""}
-                    onClick={() => setSelectedCinema(cinema)}
+                    onClick={() => {
+                      setSelectedCinema(cinema);
+                      setSelectedMovie(null);
+                      setSelectedTime(null);
+                    }}
                   >
                     {cinema.name}
                   </li>
@@ -129,15 +326,22 @@ export default function Reservation() {
             <div className="section">
               <h2>{selectedMovie ? selectedMovie.title : "영화"}</h2>
               <ul>
-                {selectedCinema && selectedCinema.movies && selectedCinema.movies.map((movie) => (
-                  <li
-                    key={movie.id}
-                    className={selectedMovie?.id === movie.id ? "selected" : ""}
-                    onClick={() => setSelectedMovie(movie)}
-                  >
-                    {movie.title}
-                  </li>
-                ))}
+                {!selectedCinema ? (
+                  <p className="placeholder">영화관을 선택해주세요.</p>
+                ) : (
+                  selectedCinema.movies && selectedCinema.movies.map((movie) => (
+                    <li
+                      key={movie.id}
+                      className={selectedMovie?.id === movie.id ? "selected" : ""}
+                      onClick={() => {
+                        setSelectedMovie(movie);
+                        setSelectedTime(null);
+                      }}
+                    >
+                      {movie.title}
+                    </li>
+                  ))
+                )}
               </ul>
             </div>
             <div className="section">
@@ -150,9 +354,9 @@ export default function Reservation() {
                       className={selectedTime === schedule.id ? "selected" : ""}
                       onClick={() => setSelectedTime(schedule.id)}
                     >
-                      {formatTime(schedule.startTime)} 
+                      {formatTime(schedule.startTime)}
                       <span className="theater-info">
-                        ({schedule.remainingSeats}석 남음)
+                                                ({schedule.remainingSeats.length}석 남음)
                       </span>
                     </li>
                   ))}
@@ -172,61 +376,52 @@ export default function Reservation() {
             </button>
           </div>
         </>
-      ) : (
+      ) : currentStep === 2 ? (
         <div className="content">
-          <h2>인원/좌석 선택</h2>
-          <div className="ticket-category">
-            <span>일반 1</span>
-            <span>청소년 1</span>
-            <span>어린이 1</span>
-            <span>우대 1</span>
-          </div>
+          <div className="seat-selection-container">
+            {}
+            <div className="left-section">
           <div className="booking-summary">
-            <p>선택하신 영화: {selectedMovie?.title}</p>
-            <p>극장: {selectedCinema?.name}</p>
-            <p>날짜: {selectedTime ? new Date(selectedMovie?.schedules.find(s => s.id === selectedTime)?.startTime).toLocaleDateString() : ''}</p>
-            <p>시간: {selectedTime ? formatTime(selectedMovie?.schedules.find(s => s.id === selectedTime)?.startTime) : ''}</p>
-            <p>잔여좌석: {selectedMovie?.schedules.find(s => s.id === selectedTime)?.remainingSeats}석</p>
+            <h2>예매 정보</h2>
+            <div className="summary-details">
+                  <div className="summary-item">
+                    <span className="label">영화</span>
+                    <span className="value">{selectedMovie?.title}</span>
           </div>
-          <div className="seat-selection">
-            <div className="navigation-buttons">
-              <button 
-                className="back-button"
-                onClick={() => {
-                  setSelectedTime(null);
-                  setSelectedSeats([]);
-                  setCurrentStep(1);
-                }}
-              >
-                ← 상영시간 선택으로 돌아가기
-              </button>
+          <div className="summary-item">
+            <span className="label">극장</span>
+                    <span className="value">{selectedCinema?.name}</span>
             </div>
-            {showPopup && (
-              <div className="seat-popup">
-                <div className="popup-content">
-                  <h3>좌석 {selectedSeatInfo.label}</h3>
-                  <p>이 좌석을 선택하시겠습니까?</p>
-                  <div className="popup-buttons">
-                    <button onClick={() => {
-                      setSelectedSeats([...selectedSeats, selectedSeatInfo.index]);
-                      setShowPopup(false);
-                    }}>확인</button>
-                    <button onClick={() => setShowPopup(false)}>취소</button>
+                          <div className="summary-item">
+                <span className="label">일시</span>
+                  <span className="value">
+                      {selectedTime ? new Date(selectedMovie?.schedules.find(s => s.id === selectedTime)?.startTime).toLocaleDateString() : ""} {" "}
+                      {selectedTime ? formatTime(selectedMovie?.schedules.find(s => s.id === selectedTime)?.startTime) : ""}
+                    </span>
                   </div>
                 </div>
               </div>
-            )}
+            
+              <div className="seat-section">
+                <h2>좌석 선택</h2>
+                <div className="screen">SCREEN</div>
             <div className="seats-grid">
-              {Array.from({ length: 80 }).map((_, index) => {
-                const isAvailable = index < (selectedMovie?.schedules.find(s => s.id === selectedTime)?.remainingSeats || 0);
+              {selectedMovie?.schedules.find(s => s.id === selectedTime)?.remainingSeats && 
+Array.from({ length: selectedMovie.schedules.find(s => s.id === selectedTime).remainingSeats.length + 1 }).map((_, index) => {
+const seatNumber = (index + 1).toString();
+                const schedule = selectedMovie?.schedules.find(s => s.id === selectedTime);
+                const isAvailable = schedule?.remainingSeats?.some(
+                        seat => seat.seatNumber === seatNumber && seat.isAvailable
+                      );
                 const isSelected = selectedSeats.includes(index);
+
                 return (
                   <div
                     key={index}
                     className={`seat ${isAvailable ? 'available' : 'unavailable'} ${isSelected ? 'selected' : ''}`}
                     onClick={() => isAvailable && !isSelected && handleSeatClick(index)}
                   >
-                    {generateSeatLabel(index)}
+                    {seatNumber}
                   </div>
                 );
               })}
@@ -245,9 +440,167 @@ export default function Reservation() {
                 <span>선택된 좌석</span>
               </div>
             </div>
-            <div className="selected-movie-poster">
-              <img src={selectedMovie?.poster} alt={selectedMovie?.title} />
             </div>
+            </div>
+
+            {}
+            <div className="right-section">
+              <div className="selected-tickets-info">
+                <h2>선택된 좌석 정보</h2>
+                {selectedTickets.length === 0 ? (
+                  <>
+                    <p className="no-tickets">선택된 좌석이 없습니다.</p>
+                    <div className="action-buttons">
+                      <button 
+                        className="long-back-button"
+                        onClick={() => setCurrentStep(1)}
+                      >
+                        이전단계
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {selectedTickets.map((ticket, index) => (
+                      <div key={index} className="ticket-info">
+                        <div className="ticket-details">
+                          <span className="seat-number">좌석 {ticket.seatLabel}</span>
+                          <span className="ticket-type">{ticket.ticketType.name}</span>
+                          <span className="ticket-price">{ticket.ticketType.price.toLocaleString()}원</span>
+                        </div>
+                        <button
+                          className="delete-button"
+                          onClick={() => {
+                            setSelectedTickets(selectedTickets.filter((_, i) => i !== index));
+                            setSelectedSeats(selectedSeats.filter(seatIndex => seatIndex !== ticket.seatIndex));
+                          }}
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                    <div className="total-price">
+                      <span>총 결제금액</span>
+                      <span className="price">
+                        {selectedTickets.reduce((sum, ticket) => sum + ticket.ticketType.price, 0).toLocaleString()}원
+                      </span>
+                    </div>
+                    <div className="action-buttons">
+                      <button 
+                        className="payment-button"
+                        onClick={() => setCurrentStep(3)}
+                        disabled={selectedTickets.length === 0}
+                      >
+                        결제하기
+                      </button>
+                      <button 
+                        className="long-back-button"
+                        onClick={() => setCurrentStep(1)}
+                      >
+                        이전단계
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+              <div className="selected-movie-poster">
+                <img src={selectedMovie?.poster} alt={selectedMovie?.title} />
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="payment-container">
+          <div className="payment-content">
+            <div className="payment-left">
+              <div className="movie-info">
+                <img src={selectedMovie?.poster} alt={selectedMovie?.title} className="movie-poster" />
+                <div className="movie-details">
+                  <h3>{selectedMovie?.title}</h3>
+                  <p>{selectedCinema?.name}</p>
+                  <p>
+                    {selectedTime ? new Date(selectedMovie?.schedules.find(s => s.id === selectedTime)?.startTime).toLocaleDateString() : ""} {" "}
+                    {selectedTime ? formatTime(selectedMovie?.schedules.find(s => s.id === selectedTime)?.startTime) : ""}
+                  </p>
+                  <p>선택좌석: {selectedTickets.map(ticket => ticket.seatLabel).join(', ')}</p>
+                </div>
+              </div>
+
+              <div className="payment-methods">
+                <h3>결제수단 선택</h3>
+                <div className="payment-options">
+                  {PAYMENT_METHODS.map(method => (
+                    <button
+                      key={method.id}
+                      className={`payment-method-button ${selectedPaymentMethod === method.id ? 'selected' : ''}`}
+                      onClick={() => setSelectedPaymentMethod(method.id)}
+                    >
+                      {method.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="payment-right">
+              <div className="payment-summary">
+                <h3>결제 금액</h3>
+                <div className="price-details">
+                  {selectedTickets.map((ticket, index) => (
+                    <div key={index} className="price-item">
+                      <span>{ticket.ticketType.name}</span>
+                      <span>{ticket.ticketType.price.toLocaleString()}원</span>
+                    </div>
+                  ))}
+                  <div className="total-price">
+                    <span>총 결제금액</span>
+                    <span>{selectedTickets.reduce((sum, ticket) => sum + ticket.ticketType.price, 0).toLocaleString()}원</span>
+                  </div>
+                </div>
+                <div className="payment-buttons">
+                  <button 
+                    className="short-back-button"
+                    onClick={() => setCurrentStep(2)}
+                  >
+                    이전으로
+                  </button>
+                  <button 
+                    className="confirm-payment-button"
+                    onClick={handlePaymentClick}
+                    disabled={!selectedPaymentMethod}
+                  >
+                    결제하기
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+              </div>
+            )}
+
+      {}
+      {showPopup && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <h3>좌석 {selectedSeatInfo?.label}</h3>
+            <div className="ticket-type-list">
+              {TICKET_TYPES.map(type => (
+                <button
+                  key={type.id}
+                  className="ticket-type-button"
+                  onClick={() => handleTicketTypeSelect(type)}
+                >
+                  <span className="ticket-type-name">{type.name}</span>
+                  <span className="ticket-type-price">{type.price.toLocaleString()}원</span>
+                </button>
+              ))}
+            </div>
+            <button 
+              className="popup-close"
+              onClick={handlePopupClose}
+            >
+              취소
+            </button>
           </div>
         </div>
       )}

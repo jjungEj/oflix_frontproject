@@ -15,13 +15,13 @@ const LoginContextProvider = ({ children }) => {
     };
 
     
-    useEffect(() => {
+    // useEffect(() => {
         
-        if (token) {
+    //     if (token) {
             
-            setLogin(true);
-        }
-    }, []);
+    //         setLogin(true);
+    //     }
+    // }, []);
 
     
 

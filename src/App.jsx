@@ -6,7 +6,9 @@ import User from "./pages/User";
 import Home from "./pages/Home";
 import Admin from "./pages/Admin";
 import Reservation from './pages/Reservation';
-import PaymentSuccess from './pages/PaymentSuccess';
+import PaymentSuccess from './pages/payment/PaymentSuccess';
+import PaymentCancel from './pages/payment/PaymentCancel';
+import PaymentFail from './pages/payment/PaymentFail';
 import Movies from './pages/Movies';
 import Header from './components/Header/Header';
 import "./components/css/global.css";
@@ -28,7 +30,9 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/join" element={<Join />} />
           <Route path="/reservation" element={<Reservation />} />
-          <Route path="/paymentsuccess" element={<PaymentSuccess />} />
+          <Route path="/payment/success" element={<PaymentSuccess />} />
+          <Route path="/payment/cancel" element={<PaymentCancel />} />
+          <Route path="/payment/fail" element={<PaymentFail />} />
           <Route path="/movies" element={<Movies />} />
           <Route path="/movie/:movieId" element={<MovieDetailForm />} />
 

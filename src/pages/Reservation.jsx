@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 
-// 결제 수단 상수 추가
 const PAYMENT_METHODS = [
   { id: 'naver', name: '네이버페이', icon: '네이버페이_아이콘_URL' },
   { id: 'kakao', name: '카카오페이', icon: '카카오페이_아이콘_URL' },
@@ -27,7 +26,6 @@ const [selectedTickets, setSelectedTickets] = useState([]);
     { id: 'child', name: '어린이', price: 7000 },
   ];
 
-  // 스케줄 데이터를 영화 스케줄 객체로 변환
   const createScheduleObject = (schedule) => ({
     id: schedule.scheduleId,
     startTime: schedule.startTime,
@@ -36,7 +34,6 @@ const [selectedTickets, setSelectedTickets] = useState([]);
     totalSeats: schedule.totalSeats
   });
 
-  // 영화 데이터를 영화 객체로 변환
   const createMovieObject = (schedule) => ({
     id: schedule.scheduleId,
     title: schedule.title,
@@ -44,7 +41,6 @@ const [selectedTickets, setSelectedTickets] = useState([]);
     schedules: [createScheduleObject(schedule)]
   });
 
-  // 영화관 데이터를 영화관 객체로 변환
   const createCinemaObject = (schedule) => ({
     id: schedule.cinemaId,
     name: schedule.cinemaName,
@@ -52,9 +48,8 @@ const [selectedTickets, setSelectedTickets] = useState([]);
     movies: []
   });
 
-  // 스케줄을 영화관별로 그룹화하고 데이터 구조화
   const processSchedules = (schedules) => {
-    // 먼저 영화관별로 그룹화
+
     const groupedByCinema = schedules.reduce((cinemas, schedule) => {
       if (!cinemas[schedule.cinemaId]) {
         cinemas[schedule.cinemaId] = createCinemaObject(schedule);
@@ -62,13 +57,11 @@ const [selectedTickets, setSelectedTickets] = useState([]);
       return cinemas;
     }, {});
 
-    // 그룹화된 영화관에 영화와 스케줄 추가
     schedules.forEach(schedule => {
       const cinema = groupedByCinema[schedule.cinemaId];
       const movieIndex = cinema.movies.findIndex(m => m.title === schedule.title);
 
       if (movieIndex === -1) {
-        // 새로운 영화 추가
         cinema.movies.push({
           id: schedule.scheduleId,
           title: schedule.title,
@@ -76,7 +69,6 @@ const [selectedTickets, setSelectedTickets] = useState([]);
           schedules: [createScheduleObject(schedule)]
         });
       } else {
-        // 기존 영화의 스케줄이 중복되지 않도록 체크
         const existingSchedules = cinema.movies[movieIndex].schedules;
         const scheduleExists = existingSchedules.some(
           s => s.id === schedule.scheduleId
@@ -129,10 +121,10 @@ const [selectedTickets, setSelectedTickets] = useState([]);
   };
 
   const handleSeatClick = (seatIndex) => {
-    const seatLabel = generateSeatLabel(seatIndex);
+    const seatLabel = generateSeatLabel(seatIndex + 1);
     setSelectedSeatInfo({
       label: seatLabel,
-      index: seatIndex,
+      index: seatIndex + 1,
       ticketType: null
     });
 setSelectedSeats([...selectedSeats, seatIndex]);
@@ -158,58 +150,16 @@ setSelectedSeats([...selectedSeats, seatIndex]);
     return selectedTickets.reduce((sum, ticket) => sum + ticket.ticketType.price, 0);
   };
 
-  // 결제 성공 처리 함수
-  const handlePaymentSuccess = async (paymentData) => {
-    try {
-      // 서버로 전송할 결제 정보
-      const paymentInfo = {
-        paymentId: paymentData.paymentId,
-        resultCode: paymentData.resultCode,
-        movieId: selectedMovie?.id,
-        movieTitle: selectedMovie?.title,
-        seats: selectedSeats,
-        tickets: selectedTickets,
-        totalAmount: calculateTotalPrice(),
-        paymentMethod: 'naver'
-      };
-
-      // 서버로 결제 정보 전송
-      const response = await fetch('http://localhost:8080/api/payment/complete', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          paymentInfo
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('서버 처리 중 오류가 발생했습니다.');
-      }
-
-      const result = await response.json();
-      alert('결제가 성공적으로 완료되었습니다.');
-    } catch (error) {
-      console.error('결제 처리 중 오류:', error.message);
-      alert('결제 처리 중 오류가 발생했습니다.');
-    }
-  };
-
-  // 네이버페이 설정
   useEffect(() => {
-    // 이미 스크립트가 로드되어 있다면 다시 로드하지 않음
     if (document.getElementById('naver-pay-sdk')) {
       return;
     }
 
-    // 네이버페이 SDK 스크립트 로드
     const script = document.createElement('script');
     script.id = 'naver-pay-sdk';
     script.src = 'https://nsp.pay.naver.com/sdk/js/naverpay.min.js';
     script.async = true;
 
-    // 스크립트 로드 완료 후 네이버페이 초기화
     script.onload = () => {
       if (window.Naver) {
         window.oPay = window.Naver.Pay.create({
@@ -222,7 +172,6 @@ setSelectedSeats([...selectedSeats, seatIndex]);
 
     document.body.appendChild(script);
 
-    // 컴포넌트 언마운트 시 스크립트 제거
     return () => {
       const scriptElement = document.getElementById('naver-pay-sdk');
       if (scriptElement) {
@@ -231,16 +180,27 @@ setSelectedSeats([...selectedSeats, seatIndex]);
     };
   }, []);
 
-  // 네이버페이 결제 처리 함수
   const handleNaverPayment = () => {
-    if (!window.oPay) {
-      console.error('네이버페이가 초기화되지 않았습니다.');
-      return;
-    }
-
     try {
       const totalAmount = calculateTotalPrice();
-      const merchantPayKey = `OFLIX_${Date.now()}`; // 고유한 주문번호 생성
+      
+      const reservationData = {
+        movieId: selectedMovie?.id,
+        movieTitle: selectedMovie?.title,
+        scheduleId: selectedTime,
+        seats: selectedSeats,
+        tickets: selectedTickets,
+        totalAmount: totalAmount
+      };
+      
+      const encodedData = encodeURIComponent(JSON.stringify(reservationData));
+
+      if (!window.oPay) {
+        console.error('네이버페이가 초기화되지 않았습니다.');
+        return;
+      }
+
+      const merchantPayKey = `OFLIX_${Date.now()}`;
 
       window.oPay.open({
         merchantPayKey: merchantPayKey,
@@ -249,14 +209,10 @@ setSelectedSeats([...selectedSeats, seatIndex]);
         totalPayAmount: String(totalAmount),
         taxScopeAmount: String(totalAmount),
         taxExScopeAmount: "0",
-        returnUrl: "http://localhost:5173/paymentsuccess",
-        onAuthorize: async function(response) {
+        returnUrl: `http://localhost:5173/payment/success?reservation=${encodedData}`,
+        onAuthorize: function(response) {
           console.log('Payment authorized:', response);
-          if (response.resultCode === 'Success') {
-            // 결제 성공 시 서버로 데이터 전송
-            await handlePaymentSuccess(response);
-          } else {
-            // 결제 실패 시 처리
+          if (response.resultCode !== 'Success') {
             alert('결제에 실패했습니다.');
           }
         }
@@ -267,23 +223,16 @@ setSelectedSeats([...selectedSeats, seatIndex]);
     }
   };
 
-  // 결제하기 버튼 클릭 핸들러
   const handlePaymentClick = () => {
     if (!selectedPaymentMethod) {
       alert("결제 수단을 선택해주세요.");
       return;
     }
 
-    // 선택된 결제 수단에 따라 처리
-    switch (selectedPaymentMethod) {
-      case 'naver':
-        handleNaverPayment();
-        break;
-      case 'kakao':
-        handleKakaoPayment();
-        break;
-      default:
-        alert("지원하지 않는 결제 수단입니다.");
+    if (selectedPaymentMethod === 'naver') {
+      handleNaverPayment();
+    } else {
+      alert("지원하지 않는 결제 수단입니다.");
     }
   };
 
@@ -407,7 +356,7 @@ setSelectedSeats([...selectedSeats, seatIndex]);
                 <div className="screen">SCREEN</div>
             <div className="seats-grid">
               {selectedMovie?.schedules.find(s => s.id === selectedTime)?.remainingSeats && 
-Array.from({ length: selectedMovie.schedules.find(s => s.id === selectedTime).remainingSeats.length + 1 }).map((_, index) => {
+Array.from({ length: selectedMovie.schedules.find(s => s.id === selectedTime).totalSeats}).map((_, index) => {
 const seatNumber = (index + 1).toString();
                 const schedule = selectedMovie?.schedules.find(s => s.id === selectedTime);
                 const isAvailable = schedule?.remainingSeats?.some(

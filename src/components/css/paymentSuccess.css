@@ -1,4 +1,4 @@
-.payment-success-container {
+/* .payment-success-container {
     max-width: 800px;
     margin: 50px auto;
     padding: 30px;
@@ -83,4 +83,87 @@
 
 .my-tickets-button:hover {
     background-color: #1976D2;
+} */
+
+
+
+.payment-success-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+  }
+
+.payment-success-content {
+background-color: white;
+padding: 30px;
+border-radius: 8px;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+text-align: center;
+width: 90%;
+max-width: 400px;
+}
+
+.success-icon {
+font-size: 50px;
+color: #ff0033e8;
+margin-bottom: 20px;
+}
+
+h1 {
+font-size: 24px;
+color: #333;
+margin-bottom: 10px;
+}
+
+p {
+font-size: 16px;
+color: #666;
+margin-bottom: 20px;
+}
+
+.payment-info {
+background-color: #e8f5e9;
+padding: 10px;
+border-radius: 5px;
+margin-bottom: 20px;
+font-size: 14px;
+color: #2c6b2f;
+}
+
+/* 버튼 스타일 */
+.success-buttons {
+display: flex;
+justify-content: space-between;
+gap: 10px;
+}
+
+.success-buttons button {
+padding: 12px 20px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+font-size: 16px;
+width: 45%;
+}
+
+.primary-button {
+background-color: black;
+color: white;
+transition: background-color 0.3s;
+}
+
+.primary-button:hover {
+background-color: #ff0033e8;
+}
+
+.secondary-button {
+background-color: #f1f1f1;
+color: #333;
+border: 1px solid #ddd;
+transition: background-color 0.3s;
+}
+
+.secondary-button:hover {
+background-color: #e7e7e7;
 }

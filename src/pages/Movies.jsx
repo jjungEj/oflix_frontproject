@@ -56,7 +56,7 @@ const Movies =  () => {
                   <div className="movie-card" key={movie.movieId}>
                     <img src={movie.images?.find(img => img.imageType === "MAIN")?.thumbnailPath || "https://via.placeholder.com/200"}  />
                     <div className="overlay"> 
-                      <button>예매하기</button>
+                    <a href={`/reservation`}>예매하기</a>
                       <a href={`/movie/${movie.movieId}`}>상세정보</a>
                     </div>
                     <h2>{movie.title}</h2>
@@ -71,7 +71,7 @@ const Movies =  () => {
                   <div className="movie-card" key={movie.movieId}>
                     <img src={movie.images?.find(img => img.imageType === "MAIN")?.thumbnailPath || "https://via.placeholder.com/200"}  />
                     <div className="overlay"> 
-                      <button>예매하기</button>
+                    <a href={`/reservation`}>예매하기</a>
                       <a href={`/movie/${movie.movieId}`}>상세정보</a>
                     </div>
                     <h2>{movie.title}</h2>

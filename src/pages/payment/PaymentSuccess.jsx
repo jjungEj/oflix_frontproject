@@ -16,7 +16,6 @@ const PaymentSuccess = () => {
 
     if (resultCode === 'Success') {
       console.log('Payment successful:', { paymentId });
-      alert('결제가 성공적으로 완료되었습니다.');
       setOkPaymentId(paymentId);
       const sendPaymentResult = async () => {
         if (isRequestSent.current) return; 
@@ -46,7 +45,6 @@ const PaymentSuccess = () => {
 
         } catch (error) {
           console.error('Error sending payment result:', error);
-          alert('결제 정보 저장 중 오류가 발생했습니다.');
         } finally {
             setIsLoading(false);
         }
@@ -54,7 +52,6 @@ const PaymentSuccess = () => {
 
       sendPaymentResult();
     } else {
-      alert('결제 처리 중 오류가 발생했습니다.');
       navigate('/payment/fail');
     }
   }, [navigate, location]);

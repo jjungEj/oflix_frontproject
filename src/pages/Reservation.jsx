@@ -219,7 +219,6 @@ setSelectedSeats([...selectedSeats, seatIndex]);
       });
     } catch (error) {
       console.error('네이버페이 결제 처리 중 오류:', error);
-      alert('결제 처리 중 오류가 발생했습니다.');
     }
   };
 

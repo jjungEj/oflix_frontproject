@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Admin from "./pages/Admin";
 import Reservation from './pages/Reservation';
 import PaymentSuccess from './pages/PaymentSuccess';
+import Movies from './pages/Movies';
 import Header from './components/Header/Header';
 import "./components/css/global.css";
 import "./components/font/gfont.css";
@@ -15,6 +16,7 @@ import "./components/css/paymentSuccess.css"
 
 import MovieDetailForm from './components/Movie/MovieDetailForm';
 import LoginContextProvider from "./contexts/LoginContextProvider";
+
 
 function App() {
   return (
@@ -27,6 +29,7 @@ function App() {
           <Route path="/join" element={<Join />} />
           <Route path="/reservation" element={<Reservation />} />
           <Route path="/paymentsuccess" element={<PaymentSuccess />} />
+          <Route path="/movies" element={<Movies />} />
           <Route path="/movie/:movieId" element={<MovieDetailForm />} />
 
           <Route path="/user" element={<User />}>

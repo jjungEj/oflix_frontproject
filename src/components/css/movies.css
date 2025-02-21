@@ -1,0 +1,102 @@
+
+.movie-page {
+  padding: 20px;
+}
+
+.tab-buttons {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.tab-buttons button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #eee;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.tab-buttons button.active {
+  background-color: #ddd;
+}
+
+.movie-list {
+  display: flex;
+  flex-wrap: wrap; 
+  justify-content: flex-start; 
+  padding: 20px;
+}
+
+.movie-card {
+  width: 200px; 
+  margin: 10px; 
+  text-align: center; 
+  position: relative; 
+  overflow: hidden; 
+}
+.movie-card .overlay {
+    position: absolute; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0; 
+    transition: opacity 0.3s ease; 
+}
+.movie-card:hover .overlay {
+    opacity: 1; 
+}
+.movie-card .overlay button,
+.movie-card .overlay a {
+  margin: 5px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #000;
+  cursor: pointer;
+  text-decoration: none; 
+}
+.movie-card img {
+  max-width: 100%; 
+  height: auto; 
+  border-radius: 8px; 
+  margin-bottom: 5px;
+}
+
+.movie-card h2 {
+  font-size: 18px; 
+  font-weight: normal;
+  margin: 0;
+}
+.movie-card h1 {
+    font-size: 15px; 
+    font-weight: normal;
+    margin: 0;
+  }
+
+
+.movie-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  font-size: 12px;
+  color: #888;
+}
+
+.movie-info span {
+  display: flex;
+  align-items: center;
+}
+
+.movie-info img {
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+}

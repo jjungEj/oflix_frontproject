@@ -101,7 +101,7 @@ const Header = () => {
             {role === "ROLE_ADMIN" ? (
               <>
                 <li className="nav_menu_item">
-                  <Link to="/admin/users" className="nav_menu_link">회원 관리</Link>
+                  <Link to="/admin/usermanagement" className="nav_menu_link">회원 관리</Link>
                 </li>
                 <li className="nav_menu_item">
                   <Link to="/admin/movies" className="nav_menu_link">영화 관리</Link>

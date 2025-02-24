@@ -4,7 +4,7 @@ import Login from "./pages/Login";
 import Join from "./pages/Join";
 import User from "./pages/User";
 import Home from "./pages/Home";
-import Admin from "./pages/Admin";
+import Admin from "./components/Admin/UsermanagementForm";
 import Reservation from './pages/Reservation';
 import PaymentSuccess from './pages/payment/PaymentSuccess';
 import PaymentCancel from './pages/payment/PaymentCancel';
@@ -22,6 +22,8 @@ import "./components/css/movies.css";
 import "./components/css/MovieAdmin.css";
 
 import MovieDetailForm from './components/Movie/MovieDetailForm';
+import UsermanagementForm from "./components/Admin/UsermanagementForm";
+
 
 
 function App() {
@@ -40,6 +42,7 @@ function App() {
           <Route path="/movies/create" element={<CreateMovie />} />
           <Route path="/movies/update/:movieId" element={<UpdateMovie />} />
           <Route path="/movieAdmin" element={<MovieAdmin />} />
+          <Route path="/admin/usermanagement" element={<UsermanagementForm />} />
 
           <Route path="/mypage" element={<User />} /> 
 

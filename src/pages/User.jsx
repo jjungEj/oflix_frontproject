@@ -1,58 +1,122 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Box, Button, Input, VStack, Text, Spinner } from "@chakra-ui/react";
 import Header from "../components/Header/Header";
 
 const User = () => {
     const [user, setUser] = useState(null);
-    const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        username: "",
+        nickname: "",
+        phoneNumber: ""
+    });
+    const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
-        const fetchUserInfo = async () => {
-            const username = "현재_로그인_한_유저의_아이디"; // 예: 로그인한 유저의 username을 가져옵니다.
-            
-            try {
-                const response = await fetch(`/api/user/${username}`, {
-                    method: "GET",
-                    credentials: "include", // 쿠키 포함 요청
-                });
+    const fetchUserInfo = async () => {
+        try {
+            setIsLoading(true);
+            const response = await fetch("/api/user/userInfo", {
+                method: "GET",
+                credentials: "include",
+            });
 
-                if (!response.ok) {
-                    throw new Error("유저 정보 불러오기 실패");
-                }
-
-                const data = await response.json();
-                setUser(data); // 유저 정보 상태 저장
-            } catch (error) {
-                console.error("유저 정보 불러오기 실패:", error);
-                setUser(null);
-                navigate("/login"); // 로그인 안 되어 있으면 로그인 페이지로 이동
+            if (!response.ok) {
+                throw new Error("유저 정보 불러오기 실패");
             }
-        };
 
+            const data = await response.json();
+            setUser(data); // 'user'는 이제 객체입니다
+            setFormData({
+                username: data.username,
+                nickname: data.nickname,
+                phoneNumber: data.phoneNumber
+            });
+        } catch (error) {
+            console.error("유저 정보 불러오기 실패:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // 마이페이지로 돌아왔을 때마다 유저 정보를 새로 불러옵니다.
+    useEffect(() => {
         fetchUserInfo();
-    }, [navigate]);
+    }, []); // 빈 배열을 전달하여 처음 한 번만 실행되게 설정
+
+    // 입력값 변경 핸들러
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    // 유저 정보 업데이트
+    const handleUpdate = async () => {
+        try {
+            setIsLoading(true);
+            const response = await fetch(`/api/user/update`, {
+                method: "PUT",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                throw new Error("유저 정보 업데이트 실패");
+            }
+
+            const updatedUser = await response.json();
+            setUser(updatedUser);
+            alert("유저 정보가 성공적으로 업데이트되었습니다.");
+        } catch (error) {
+            console.error("유저 정보 업데이트 실패:", error);
+            alert("유저 정보 업데이트에 실패했습니다.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <>
             <Header />
-            <div className="container">
-                <h1>User</h1>
-                <hr />
-                {user ? (
-                    <div>
-                        <h2>유저 페이지</h2>
-                        <p>사용자명: {user.username}</p>
-                        <p>닉네임: {user.nickname}</p>
-                        <p>전화번호: {user.phoneNumber}</p>
-                        <p>생년월일: {user.birthDate}</p> {/* 생년월일 출력 */}
-                        <p>권한: {user.role}</p>
-                    </div>
+            <Box className="container" p={5}>
+                <Text fontSize="2xl" mb={4}>User</Text>
+                {isLoading ? (
+                    <Spinner size="xl" />
+                ) : user ? (
+                    <VStack spacing={4} align="stretch">
+                        <Text fontSize="lg">사용자명: {user.username}</Text>
+
+                        <Input
+                            name="username"
+                            value={formData.username}
+                            onChange={handleChange}
+                            placeholder="사용자명"
+                        />
+
+                        <Input
+                            name="nickname"
+                            value={formData.nickname}
+                            onChange={handleChange}
+                            placeholder="닉네임"
+                        />
+
+                        <Input
+                            name="phoneNumber"
+                            value={formData.phoneNumber}
+                            onChange={handleChange}
+                            placeholder="전화번호"
+                        />
+
+                        <Button colorScheme="blue" onClick={handleUpdate}>수정하기</Button>
+                    </VStack>
                 ) : (
-                    <p>유저 정보를 불러오는 중...</p>
+                    <Text>유저 정보를 불러오는 중...</Text>
                 )}
-            </div>
+            </Box>
         </>
     );
 };
-
 export default User;

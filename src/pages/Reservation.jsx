@@ -34,13 +34,6 @@ const [selectedTickets, setSelectedTickets] = useState([]);
     totalSeats: schedule.totalSeats
   });
 
-  const createMovieObject = (schedule) => ({
-    id: schedule.scheduleId,
-    title: schedule.title,
-    poster: schedule.posterUrl,
-    schedules: [createScheduleObject(schedule)]
-  });
-
   const createCinemaObject = (schedule) => ({
     id: schedule.cinemaId,
     name: schedule.cinemaName,
@@ -117,14 +110,16 @@ const [selectedTickets, setSelectedTickets] = useState([]);
   };
 
   const generateSeatLabel = (seatNumber) => {
+        seatNumber = seatNumber + 1;
         return seatNumber.toString();
   };
 
   const handleSeatClick = (seatIndex) => {
-    const seatLabel = generateSeatLabel(seatIndex + 1);
+    const seatLabel = generateSeatLabel(seatIndex);
+  
     setSelectedSeatInfo({
       label: seatLabel,
-      index: seatIndex + 1,
+      index: seatIndex,
       ticketType: null
     });
 setSelectedSeats([...selectedSeats, seatIndex]);
@@ -355,17 +350,17 @@ setSelectedSeats([...selectedSeats, seatIndex]);
                 <div className="screen">SCREEN</div>
             <div className="seats-grid">
               {selectedMovie?.schedules.find(s => s.id === selectedTime)?.remainingSeats && 
-Array.from({ length: selectedMovie.schedules.find(s => s.id === selectedTime).totalSeats}).map((_, index) => {
-const seatNumber = (index + 1).toString();
-                const schedule = selectedMovie?.schedules.find(s => s.id === selectedTime);
-                const isAvailable = schedule?.remainingSeats?.some(
-                        seat => seat.seatNumber === seatNumber && seat.isAvailable
-                      );
+                Array.from({ length: selectedMovie.schedules.find(s => s.id === selectedTime).totalSeats}).map((_, index) => {
+                  const seatNumber = (index + 1).toString();
+                  const schedule = selectedMovie?.schedules.find(s => s.id === selectedTime);
+                  const isAvailable = schedule?.remainingSeats?.some(
+                          seat => seat.seatNumber === seatNumber && seat.isAvailable
+                        );
                 const isSelected = selectedSeats.includes(index);
 
                 return (
                   <div
-                    key={index}
+                    key={index + 1}
                     className={`seat ${isAvailable ? 'available' : 'unavailable'} ${isSelected ? 'selected' : ''}`}
                     onClick={() => isAvailable && !isSelected && handleSeatClick(index)}
                   >

@@ -1,0 +1,90 @@
+.movieRegisterContainer {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #ffffff;
+  }
+
+  .movieRegisterContainer h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+
+  .message {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #e0ffe0;
+    border: 1px solid #4caf50;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  .formGroup {
+    margin-bottom: 15px;
+  }
+  
+  .formGroup label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .formGroup input,
+  .formGroup select,
+  .formGroup textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+
+  .synopsis-textArea{
+    width: 100%;
+    height: 6.25em;
+    border: none;
+    resize: none;
+  }
+
+  .buttonGroup {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .buttonGroup button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .resetButton{
+    background-color: #ccc;
+    color: rgb(0, 0, 0);
+  }
+  
+  .buttonGroup button[type="submit"] {
+    background-color: #f70e0e;
+    color: white;
+  }
+
+.existingImage {
+    display: flex;       
+    flex-direction: row;    
+    gap: 10px;               
+    overflow-x: auto;       
+    padding: 10px 0;
+  }
+  
+  .existingImage img {
+    width: 50px; 
+    height: auto;         
+    border-radius: 8px;     
+    object-fit: cover;     
+  } 
+

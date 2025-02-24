@@ -8,6 +8,9 @@ function MovieDetailForm() {
   const [movie, setMovie] = useState(null);
   const [error, setError] = useState(null);
 
+  const [stillCuts, setStillCuts] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   const viewAgeMapping = {
     ALL: "전체 이용가",
     AGE12: "12세 이용가",
@@ -17,7 +20,7 @@ function MovieDetailForm() {
 
   const nationMapping = {
     KOREA : "한국",
-    USE : "미국",
+    USA : "미국",
     FOREIGN : "해외",
   };
 
@@ -47,13 +50,15 @@ function MovieDetailForm() {
     return data;
   }
 
-  //이미지 슬라이드 해보기기
-  const imageSlide = () => {
-    const [image, setImage] = useState(0);
+    const nextSlide = () => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % stillCuts.length);
+    };
+  
+    const prevSlide = () => {
+      setCurrentIndex((prevIndex) => (prevIndex - 1 + stillCuts.length) % stillCuts.length);
+    };
+  
 
-
-
-  }
 
   const fetchMovie = async () => {
     try {
@@ -63,6 +68,12 @@ function MovieDetailForm() {
       }
       const data = await response.json();
       setMovie(data);
+
+      if (data.images && Array.isArray(data.images)) {
+        const filteredCuts = data.images.filter((img) => img.imageType === "STILL");
+        setStillCuts(filteredCuts);
+      }
+
     } catch (err) {
       setError(err.message);
     }
@@ -94,7 +105,7 @@ function MovieDetailForm() {
             {changeDate(movie.releaseDate)} 개봉 | {movie.runTime}분 |  {viewAgeMapping[movie.viewAge] || "등급 정보 없음"} | {nationMapping[movie.nation]}
           </p>
           <p className="metaDetail"><strong>감독 </strong> {movie.director}</p>
-          <p className="metaDetail"><strong>배우 </strong> {movie.actors}</p>
+          <p className="metaDetail"><strong>출연 </strong> {movie.actors}</p>
           <p className="metaDetail"><strong>장르 </strong> {genreMapping[movie.genre1]}, {genreMapping[movie.genre2]}</p>
           <div className="button">
           <Button colorPalette={ifComingSoon(movie.releaseDate) ? "gray" : "red"} disabled={ifComingSoon(movie.releaseDate)} size="xl">{ifComingSoon(movie.releaseDate) ? "상영 예정" : "예매하기"}</Button>
@@ -111,12 +122,31 @@ function MovieDetailForm() {
 
       <div className="movieSynopsis">
         <br />
-        <br />
-        <div className="stillcut">
-        {movie.images?.filter(img => img.imageType === "STILL").map(image => (
-          <img key={image.imageId} className="gallery-image" src={image.imagePath} alt={image.imageName} />
-        ))}
-      </div>
+        <div className="movie-detail-container">
+          <div className="slider-container">
+            <button className="slider-button" onClick={prevSlide}>
+              &#9664;
+            </button>
+
+            <div className="slide">
+              {stillCuts.length > 0 && (
+                <img
+                  src={stillCuts[currentIndex].imagePath}
+                  alt={`스틸컷 ${currentIndex + 1}`}
+                  className="slide-image"
+                />
+              )}
+            </div>
+
+            <button className="slider-button" onClick={nextSlide}>
+              &#9654;
+            </button>
+          </div>
+
+          <div className="slider-indicator">
+            {currentIndex + 1} / {stillCuts.length}
+          </div>
+        </div>
       </div>
     </Box>
   );

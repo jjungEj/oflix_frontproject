@@ -1,5 +1,7 @@
-import React, { useState, useContext } from 'react';
+
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Box, Input, Button, VStack, Text } from '@chakra-ui/react';
 
 const LoginForm = () => {
     const [username, setUsername] = useState('');
@@ -29,55 +31,51 @@ const LoginForm = () => {
         }
     };
 
-    const onLogin = async (event) => {
-        event.preventDefault(); // 기본 폼 제출 동작 방지
+    const handleLogin = async (event) => {
+        event.preventDefault();
 
         try {
             const data = await loginProcess(username, password);
-            
-            navigate('/'); // 로그인 성공 후 홈으로 이동
+            navigate('/');
         } catch (error) {
             console.error('로그인 에러:', error);
         }
     };
 
     return (
-        <div className="form">
-            <form className="login-form" onSubmit={onLogin}>
-                <div>
-                    <label htmlFor="username">Username</label>
-                    <input
-                        type="text"
-                        id="username"
-                        placeholder="Username"
-                        name="username"
-                        autoComplete="username"
-                        required
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="password">Password</label>
-                    <input
-                        type="password"
-                        id="password"
-                        placeholder="Password"
-                        name="password"
-                        autoComplete="current-password"
-                        required
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
+        <Box maxW="400px" mx="auto" mt="50px" p="6" borderWidth="1px" borderRadius="lg" boxShadow="md">
+            <Text fontSize="2xl" fontWeight="bold" textAlign="center" mb="4">
+                로그인
+            </Text>
 
-                {errorMessage && <p className="error-message">{errorMessage}</p>}
+            <VStack spacing="4" as="form" onSubmit={handleLogin}>
+                <Input
+                    type="text"
+                    placeholder="아이디 입력"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                />
 
-                <button type="submit" className="btn btn--form btn-login">
-                    Login
-                </button>
-            </form>
-        </div>
+                <Input
+                    type="password"
+                    placeholder="비밀번호 입력"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
+
+                {errorMessage && (
+                    <Text color="red.500" fontSize="sm">
+                        {errorMessage}
+                    </Text>
+                )}
+
+                <Button colorScheme="red" w="100%" type="submit">
+                    로그인
+                </Button>
+            </VStack>
+        </Box>
     );
 };
 

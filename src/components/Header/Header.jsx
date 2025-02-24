@@ -3,107 +3,149 @@ import { Link, useNavigate } from "react-router-dom";
 import "../css/header.css";
 
 const Header = () => {
-  const [username, setUsername] = useState(null);
+  const [role, setRole] = useState(null); // 권한 상태
   const navigate = useNavigate();
 
-  // 유저 정보 가져오기
-  const fetchUserInfo = async () => {
-    try {
-      const response = await fetch('/api/user/userInfo', {
-        method: 'GET',
-      });
-  
-      // 응답 상태 확인
-      if (!response.ok) {
-        throw new Error('유저 정보 불러오기 실패');
-      }
-  
-      // 응답을 JSON으로 변환
-      const data = await response.json();
-      console.log("유저 정보:", data);
-  
-    } catch (error) {
-      console.error("유저 정보 불러오기 실패:", error);
-    }
-  };
-  
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await fetch("/api/user/userInfo", {
+          method: "GET",
+          credentials: "include",
+        });
 
-  /*// 로그아웃 기능
+        if (!response.ok) {
+          throw new Error("유저 정보 불러오기 실패");
+        }
+
+        const data = await response.json();
+        setRole(data.role);
+      } catch (error) {
+        console.error("유저 정보 불러오기 실패:", error);
+        setRole(null);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
+
   const handleLogout = async () => {
     try {
-      const response = await fetch("/api/logout", {
+      const response = await fetch("/logout", {
         method: "POST",
-        credentials: "include", // 쿠키 포함 요청
+        credentials: "include",
       });
 
-      if (response.ok) {
-        setUsername(null);
-        navigate("/"); // 로그아웃 후 메인 페이지 이동
+      if (!response.ok) {
+        throw new Error("로그아웃 실패");
       }
+
+      setRole(null);
+      navigate("/");
     } catch (error) {
       console.error("로그아웃 실패:", error);
     }
-  };*/
+  };
 
   return (
-    <header>
-      <div className="header">
-        <div className="header_content">
-          <div className="contents">
-            {/* 로고 */}
-            <h1 style={{ cursor: "pointer" }}>
-              <a href="/">
-                <img src="" alt="OFlixLogo" />
-              </a>
-              <span>OFlix!</span>
-            </h1>
+    <header className="header">
+      <div className="header_content">
+        <div className="header_content_contents">
+          <h1 className="header_logo">
+            <Link to="/" className="header_logo_link">
+              <img src="" alt="OFlixLogo" className="header_logo_image" />
+            </Link>
+            <span className="header_logo_text">OFlix!</span>
+          </h1>
 
-            {/* 로그인 상태에 따라 다른 UI 표시 */}
-            <ul className="memberInfo_wrap">
-              <li>
-                <Link to="/reservation">예매하기</Link>
-              </li>
-              <li>
-                <Link to="/">메인페이지</Link>
-              </li>
-              <li>
-                <Link to="/MovieAdmin">관리자페이지</Link>
-              </li>
-              {username ? (
-                <>
-                  <li>
-                    <span style={{ fontWeight: "bold", color: "#333" }}>
-                      {username} 님
-                    </span>
-                  </li>
-                  <li>
-                    <button onClick={handleLogout} className="logout-button">
-                      로그아웃
-                    </button>
-                  </li>
-                </>
-              ) : (
-                <>
-                  <li>
-                    <Link to="/login">로그인</Link>
-                  </li>
-                  <li>
-                    <Link to="/join">회원가입</Link>
-                  </li>
-                </>
-              )}
-            </ul>
-          </div>
+          <ul className="member_info_wrap">
+            <li className="member_info_item">
+              <Link to="/" className="member_info_link">메인페이지</Link>
+            </li>
 
-          <nav className="nav_menu">
-            <ul>
-              <li><Link to="/movies">영화</Link></li>
-              <li><Link to="/reservation">예매</Link></li>
-              <li><Link to="/events">이벤트</Link></li>
-              <li><Link to="/offers">할인</Link></li>
-            </ul>
-          </nav>
+            {/* 로그인 상태에 따른 UI 변경 */}
+            {role === "ROLE_ADMIN" ? (
+              <>
+                <li className="member_info_item">
+                  <Link to="/admin" className="member_info_link">어드민 페이지</Link>
+                </li>
+                <li className="member_info_item">
+                  <button className="logout-button" onClick={handleLogout}>로그아웃</button>
+                </li>
+              </>
+            ) : role === "ROLE_USER" ? (
+              <>
+                <li className="member_info_item">
+                  <Link to="/mypage" className="member_info_link">마이페이지</Link>
+                </li>
+                <li className="member_info_item">
+                  <button className="logout-button" onClick={handleLogout}>로그아웃</button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="member_info_item">
+                  <Link to="/login" className="member_info_link">로그인</Link>
+                </li>
+                <li className="member_info_item">
+                  <Link to="/join" className="member_info_link">회원가입</Link>
+                </li>
+              </>
+            )}
+          </ul>
         </div>
+
+        {/* 네비게이션 메뉴 (사용자 권한에 따라 다르게 표시) */}
+        <nav className="nav_menu">
+          <ul className="nav_menu_list">
+            {role === "ROLE_ADMIN" ? (
+              <>
+                <li className="nav_menu_item">
+                  <Link to="/admin/users" className="nav_menu_link">회원 관리</Link>
+                </li>
+                <li className="nav_menu_item">
+                  <Link to="/admin/movies" className="nav_menu_link">영화 관리</Link>
+                </li>
+                <li className="nav_menu_item">
+                  <Link to="/admin/theaters" className="nav_menu_link">극장 관리</Link>
+                </li>
+                <li className="nav_menu_item">
+                  <Link to="/admin/events" className="nav_menu_link">이벤트 관리</Link>
+                </li>
+              </>
+            ) : role === "ROLE_USER" ? (
+              <>
+                <li className="nav_menu_item">
+                  <Link to="/movies" className="nav_menu_link">영화</Link>
+                </li>
+                <li className="nav_menu_item">
+                  <Link to="/reservation" className="nav_menu_link">예매</Link>
+                </li>
+                <li className="nav_menu_item">
+                  <Link to="/theaters" className="nav_menu_link">극장</Link>
+                </li>
+                <li className="nav_menu_item">
+                  <Link to="/events" className="nav_menu_link">이벤트</Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="nav_menu_item">
+                  <Link to="/movies" className="nav_menu_link">영화</Link>
+                </li>
+                <li className="nav_menu_item">
+                  <Link to="/reservation" className="nav_menu_link">예매</Link>
+                </li>
+                <li className="nav_menu_item">
+                  <Link to="/theaters" className="nav_menu_link">극장</Link>
+                </li>
+                <li className="nav_menu_item">
+                  <Link to="/events" className="nav_menu_link">이벤트</Link>
+                </li>
+              </>
+            )}
+          </ul>
+        </nav>
       </div>
     </header>
   );

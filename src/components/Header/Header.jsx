@@ -66,6 +66,9 @@ const Header = () => {
               <li>
                 <Link to="/">메인페이지</Link>
               </li>
+              <li>
+                <Link to="/MovieAdmin">관리자페이지</Link>
+              </li>
               {username ? (
                 <>
                   <li>

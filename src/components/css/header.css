@@ -1,132 +1,137 @@
 .header {
-    position: relative;
-    z-index: 101;
-  }
-  
-  .header .contents {
-    width: 980px;
-    margin: 0 auto;
-  }
-  
-  .header_content {
-    margin-bottom: 50px;
-    background-color: #fff;
-    border-bottom: 2px solid #ff0000;
-  }
-  
-  .header_content .contents {
-    display: flex;
-    justify-content: space-between;
-    padding: 30px 6px 25px 5px;
-    background-color: #fff;
-  }
-  .header_content .contents h1 {
-    display: inline-flex;
-    align-items: flex-end;
-    height: 53px;
-  }
-  
-  .header_content .contents h1 a {
-    display: block;
-    float: left;
-    height: 100%;
-  }
-  
-  .header_content .contents h1 a img {
-    display: block;
-    width: auto;
-    height: 100%;
-    object-fit: contain;
-  }
-  
-  .header_content .contents h1 span {
-    font-weight: 300;
-    font-size: 16px;
-    color: #222;
-    letter-spacing: 0.313em;
-    line-height: 1.500em;
-  }
-  
-  .header_content .contents .memberInfo_wrap {
-    display: flex;
-    align-items: center;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    margin-bottom: 20px;
-  }
-  
-  .header_content .contents .memberInfo_wrap li {
-    margin-left: 44px;
-    margin-top: 2px;
-  }
-  
-  .header_content .contents .memberInfo_wrap li a {
-    display: block;
-    position: relative;
-    padding-bottom: 19px;
-    font-size: 16px;
-    color: #333;
-    text-decoration: none;
-    font-weight: bold;
-  }
- 
-  
-  .header_content .contents .memberInfo_wrap li a img {
-    width: 36px;
-    height: 36px;
-  }
-  
-  .header_content .contents .memberInfo_wrap li a span {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    font-size: 13px;
-    color: #666;
-    line-height: 1.462em;
-    white-space: nowrap;
-    transform: translate(-50%, 0);
-  }
-  
-  
-  /* 네비게이션 메뉴 (header_content 아래) */
-  .header_content .nav_menu {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-top: 2px solid#eee;
-    padding: 15px 20px; 
-  }
-  
-  .header_content .nav_menu ul {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .header_content .nav_menu li {
-    margin-left: 60px;
-  }
-  
-  .header_content .nav_menu li:first-child {
-    margin-left: 0;
-  }
-  
-  .header_content .nav_menu li a {
-    display: block;
-    padding-bottom: 15px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-    text-decoration: none;
-  }
-  
-  .header_content .nav_menu li a:hover {
-    color: red;
-  }
-  
-  .header_content .nav_menu li a:focus {
-    outline: none;
-  }
-  
+  position: relative;
+  z-index: 101;
+}
+
+.header_contents {
+  width: 980px;
+  margin: 0 auto;
+}
+
+.header_content {
+  margin-bottom: 50px;
+  background-color: #fff;
+  border-bottom: 2px solid #ff0000;
+}
+
+.header_content_contents {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 6px 25px 5px;
+  background-color: #fff;
+}
+
+.header_logo {
+  display: inline-flex;
+  align-items: flex-end;
+  height: 53px;
+  margin-left: 44px;
+}
+
+.header_logo_link {
+  display: block;
+  float: left;
+  height: 100%;
+}
+
+.header_logo_image {
+  display: block;
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+}
+
+.header_logo_text {
+  font-weight: 300;
+  font-size: 16px;
+  color: #222;
+  letter-spacing: 0.313em;
+  line-height: 1.500em;
+}
+
+.member_info_wrap {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.member_info_item {
+  margin-right: 44px;
+}
+
+.member_info_link {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+  position: relative;
+}
+
+.member_info_icon {
+  width: 36px;
+  height: 36px;
+  margin-right: 8px;
+}
+
+.member_info_text {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.462em;
+  white-space: nowrap;
+}
+
+.nav_menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 2px solid #eee;
+  padding: 15px 20px;
+}
+
+.nav_menu_list {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav_menu_item {
+  margin-left: 60px;
+}
+
+.nav_menu_item:first-child {
+  margin-left: 0;
+}
+
+.nav_menu_link {
+  display: block;
+  padding-bottom: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+}
+
+.nav_menu_link:hover {
+  color: red;
+}
+
+.nav_menu_link:focus {
+  outline: none;
+}
+
+.logout-button {
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+}

@@ -1,118 +1,84 @@
-
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Box, Input, Button, VStack, Text } from "@chakra-ui/react";
 
 const JoinForm = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [nickname, setNickname] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [birthDate, setBirthDate] = useState(''); 
+  const navigate = useNavigate();
 
-    const handleJoin = async (e) => {
-        e.preventDefault();
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    nickname: "",
+    phoneNumber: "",
+    birthDate: "",
+  });
 
-        try {
-            const response = await fetch("/api/user/join", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    username,
-                    password,
-                    nickname, 
-                    phoneNumber, 
-                    birthDate, 
-                }),
-            });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
-            if (!response.ok) {
-                throw new Error("회원가입 실패");
-            }
+  const handleJoin = async (e) => {
+    e.preventDefault();
 
-            const data = await response.json();
-            console.log("회원가입 성공:", data);
-            alert("회원가입이 완료되었습니다!");
-        } catch (error) {
-            console.error("회원가입 오류:", error);
-            alert("회원가입에 실패했습니다.");
-        }
-    };
+    try {
+      const response = await fetch("/api/user/join", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    return (
-        <div className="form">
-            <h2 className='login-title'>Join</h2>
+      if (!response.ok) {
+        throw new Error("회원가입 실패");
+      }
 
-            <form className='login-form' onSubmit={handleJoin}>
-                <div>
-                    <label htmlFor='username'>Username</label>
-                    <input 
-                        type='text'
-                        id='username'
-                        placeholder='ID를 입력하세요'
-                        name='username'
-                        autoComplete='username'
-                        required
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label htmlFor='password'>Password</label>
-                    <input 
-                        type='password'
-                        id='password'
-                        placeholder='Password'
-                        name='password'
-                        autoComplete='password'
-                        required
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label htmlFor='nickname'>Nickname</label> 
-                    <input 
-                        type='text'
-                        id='nickname'
-                        placeholder='Nickname'
-                        name='nickname'
-                        autoComplete='nickname'
-                        required
-                        value={nickname}
-                        onChange={(e) => setNickname(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label htmlFor='phoneNumber'>Phone Number</label>
-                    <input 
-                        type='tel'
-                        id='phoneNumber'
-                        placeholder='Phone Number'
-                        name='phoneNumber'
-                        autoComplete='tel'
-                        required
-                        value={phoneNumber}
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label htmlFor='birthDate'>Date of Birth</label>
-                    <input 
-                        type='date'
-                        id='birthDate'
-                        name='birthDate'
-                        required
-                        value={birthDate}
-                        onChange={(e) => setBirthDate(e.target.value)}
-                    />
-                </div>
-                <button type='submit' className='btn btn--form btn-login'>
-                    Join
-                </button>
-            </form>
-        </div>
-    );
+      console.log("회원가입 성공!");
+      navigate("/"); // 메인 페이지로 이동
+    } catch (error) {
+      console.error("회원가입 오류:", error);
+    }
+  };
+
+  return (
+    <Box maxW="400px" mx="auto" mt="50px" p="6" borderWidth="1px" borderRadius="lg" boxShadow="md">
+      <Text fontSize="2xl" fontWeight="bold" textAlign="center" mb="4">
+        회원가입
+      </Text>
+
+      <VStack spacing="4" as="form" onSubmit={handleJoin}>
+        {[
+          { label: "아이디", type: "text", name: "username", placeholder: "아이디 입력" },
+          { label: "비밀번호", type: "password", name: "password", placeholder: "비밀번호 입력" },
+          { label: "닉네임", type: "text", name: "nickname", placeholder: "닉네임 입력" },
+          { label: "전화번호", type: "tel", name: "phoneNumber", placeholder: "전화번호 입력" },
+          { label: "생년월일", type: "date", name: "birthDate", placeholder: "" },
+        ].map(({ label, type, name, placeholder }) => (
+          <Box w="100%" key={name}>
+            <Text fontSize="sm" fontWeight="bold" mb="1">
+              {label}
+            </Text>
+            <Input
+              type={type}
+              name={name}
+              placeholder={placeholder}
+              value={formData[name]}
+              onChange={handleChange}
+              required
+            />
+          </Box>
+        ))}
+
+        <Button colorScheme="red" w="100%" type="submit">
+          가입하기
+        </Button>
+      </VStack>
+    </Box>
+  );
 };
 
 export default JoinForm;

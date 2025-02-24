@@ -11,7 +11,6 @@ import PaymentCancel from './pages/payment/PaymentCancel';
 import PaymentFail from './pages/payment/PaymentFail';
 import Movies from './pages/Movies';
 import MovieAdmin from "./pages/MovieAdmin";
-import Header from './components/Header/Header';
 import "./components/css/global.css";
 import "./components/font/gfont.css";
 import "./components/css/reservation.css"
@@ -23,14 +22,11 @@ import "./components/css/movies.css";
 import "./components/css/MovieAdmin.css";
 
 import MovieDetailForm from './components/Movie/MovieDetailForm';
-import LoginContextProvider from "./contexts/LoginContextProvider";
 
 
 function App() {
   return (
     <Router>
-      <LoginContextProvider>
-        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -45,15 +41,10 @@ function App() {
           <Route path="/movies/update/:movieId" element={<UpdateMovie />} />
           <Route path="/movieAdmin" element={<MovieAdmin />} />
 
-          <Route path="/user" element={<User />}>
-            <Route path="mypage" element={<User />} /> {/* 상대 경로 사용 */}
-          </Route>
+          <Route path="/mypage" element={<User />} /> 
 
-          <Route path="/admin" element={<Admin />}>
-            <Route path="adminpage" element={<Admin />} /> {/* 상대 경로 사용 */}
-          </Route>
+          <Route path="/adminpage" element={<Admin />} /> 
         </Routes>
-      </LoginContextProvider>
     </Router>
   );
 }

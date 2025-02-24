@@ -10,6 +10,7 @@ import PaymentSuccess from './pages/payment/PaymentSuccess';
 import PaymentCancel from './pages/payment/PaymentCancel';
 import PaymentFail from './pages/payment/PaymentFail';
 import Movies from './pages/Movies';
+import MovieAdmin from "./pages/MovieAdmin";
 import Header from './components/Header/Header';
 import "./components/css/global.css";
 import "./components/font/gfont.css";
@@ -18,6 +19,8 @@ import "./components/css/paymentSuccess.css"
 import CreateMovie from './pages/CreateMovie';
 import UpdateMovie from './pages/UpdateMovie';
 
+import "./components/css/movies.css";
+import "./components/css/MovieAdmin.css";
 
 import MovieDetailForm from './components/Movie/MovieDetailForm';
 import LoginContextProvider from "./contexts/LoginContextProvider";
@@ -40,6 +43,7 @@ function App() {
           <Route path="/movie/:movieId" element={<MovieDetailForm />} />
           <Route path="/movies/create" element={<CreateMovie />} />
           <Route path="/movies/update/:movieId" element={<UpdateMovie />} />
+          <Route path="/movieAdmin" element={<MovieAdmin />} />
 
           <Route path="/user" element={<User />}>
             <Route path="mypage" element={<User />} /> {/* 상대 경로 사용 */}

@@ -1,0 +1,75 @@
+.container {
+    width: 80%;
+    margin: 20px auto;
+}
+  
+.search-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+  
+.select-box, .search-input {
+    padding: 5px;
+    font-size: 14px;
+}
+  
+.search-button, .register-button {
+    background-color: rgb(255, 255, 255);
+    color: black;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+  
+.register-button {
+    background-color: rgb(255, 255, 255);
+}
+  
+.movie-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+  
+.movie-table th, .movie-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+  
+.movie-table th {
+    background-color: #f4f4f4;
+}
+  
+.edit-button {
+    background-color: rgb(255, 255, 255);
+    color: black;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+  
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+  
+.pagination button {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.delete-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+  
+.delete-button:hover {
+    background-color: #cc0000;
+}
+  

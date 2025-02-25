@@ -7,7 +7,7 @@ const Usermanagement = () => {
         <>
             <Header />
             <div className='container'>
-            <Usermanagement />
+            <UsermanagementForm />
             </div>
         </>
     )

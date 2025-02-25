@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Input, VStack, Text, Spinner } from "@chakra-ui/react";
+import { Box, Button, Input, VStack, Text, Spinner, HStack } from "@chakra-ui/react";
 import Header from "../components/Header/Header";
 
 const User = () => {
@@ -37,12 +37,10 @@ const User = () => {
         }
     };
 
-    // 마이페이지로 돌아왔을 때마다 유저 정보를 새로 불러옵니다.
     useEffect(() => {
         fetchUserInfo();
-    }, []); // 빈 배열을 전달하여 처음 한 번만 실행되게 설정
+    }, []);
 
-    // 입력값 변경 핸들러
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -50,7 +48,6 @@ const User = () => {
         });
     };
 
-    // 유저 정보 업데이트
     const handleUpdate = async () => {
         try {
             setIsLoading(true);
@@ -88,27 +85,27 @@ const User = () => {
                 ) : user ? (
                     <VStack spacing={4} align="stretch">
                         <Text fontSize="lg">사용자명: {user.username}</Text>
+                        {/* username을 텍스트로 표시 */}
+                        
+                        <HStack spacing={4}>
+                            <Text fontWeight="bold" minWidth="100px">닉네임:</Text>
+                            <Input
+                                name="nickname"
+                                value={formData.nickname}
+                                onChange={handleChange}
+                                placeholder="닉네임"
+                            />
+                        </HStack>
 
-                        <Input
-                            name="username"
-                            value={formData.username}
-                            onChange={handleChange}
-                            placeholder="사용자명"
-                        />
-
-                        <Input
-                            name="nickname"
-                            value={formData.nickname}
-                            onChange={handleChange}
-                            placeholder="닉네임"
-                        />
-
-                        <Input
-                            name="phoneNumber"
-                            value={formData.phoneNumber}
-                            onChange={handleChange}
-                            placeholder="전화번호"
-                        />
+                        <HStack spacing={4}>
+                            <Text fontWeight="bold" minWidth="100px">전화번호:</Text>
+                            <Input
+                                name="phoneNumber"
+                                value={formData.phoneNumber}
+                                onChange={handleChange}
+                                placeholder="전화번호"
+                            />
+                        </HStack>
 
                         <Button colorScheme="blue" onClick={handleUpdate}>수정하기</Button>
                     </VStack>

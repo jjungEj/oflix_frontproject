@@ -22,7 +22,7 @@ import "./components/css/movies.css";
 import "./components/css/MovieAdmin.css";
 
 import MovieDetailForm from './components/Movie/MovieDetailForm';
-import UsermanagementForm from "./components/Admin/UsermanagementForm";
+import Usermanagement from "./pages/Usermanagement";
 
 
 
@@ -42,7 +42,7 @@ function App() {
           <Route path="/movies/create" element={<CreateMovie />} />
           <Route path="/movies/update/:movieId" element={<UpdateMovie />} />
           <Route path="/movieAdmin" element={<MovieAdmin />} />
-          <Route path="/admin/usermanagement" element={<UsermanagementForm />} />
+          <Route path="/admin/usermanagement" element={<Usermanagement />} />
 
           <Route path="/mypage" element={<User />} /> 
 

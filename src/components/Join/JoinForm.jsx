@@ -10,7 +10,6 @@ const JoinForm = () => {
     password: "",
     nickname: "",
     phoneNumber: "",
-    birthDate: "",
   });
 
   const handleChange = (e) => {
@@ -51,12 +50,11 @@ const JoinForm = () => {
       </Text>
 
       <VStack spacing="4" as="form" onSubmit={handleJoin}>
-        {[
+        {[ 
           { label: "아이디", type: "text", name: "username", placeholder: "아이디 입력" },
           { label: "비밀번호", type: "password", name: "password", placeholder: "비밀번호 입력" },
           { label: "닉네임", type: "text", name: "nickname", placeholder: "닉네임 입력" },
           { label: "전화번호", type: "tel", name: "phoneNumber", placeholder: "전화번호 입력" },
-          { label: "생년월일", type: "date", name: "birthDate", placeholder: "" },
         ].map(({ label, type, name, placeholder }) => (
           <Box w="100%" key={name}>
             <Text fontSize="sm" fontWeight="bold" mb="1">

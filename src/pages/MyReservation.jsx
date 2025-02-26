@@ -1,16 +1,18 @@
-import React from 'react'
-import Header from '../components/Header/Header'
-import PaymentSuccess from '../components/payment/PaymentSuccess'
 
-const PaymentsSuccess = () => {
+import React from 'react'
+import MyReservation from '../components/Reservation/MyReservation'
+import Header from '../components/Header/Header'
+
+
+const MyReservations = () => {
     return (
         <>
             <Header />
             <div className='container'>
-                <PaymentSuccess />
+                <MyReservation />
             </div>
         </>
     )
 }
 
-export default PaymentsSuccess;
+export default MyReservations;

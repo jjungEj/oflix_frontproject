@@ -1,0 +1,170 @@
+.movie-page {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+}
+
+.tab-buttons-container {
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  display: flex;
+}
+  
+.tab-buttons {
+  display: flex;
+}
+  
+.tab-buttons button {
+  border: 1px solid #ccc; 
+  background-color: #f9f9f9; 
+  cursor: pointer;
+  border-radius: 5px; 
+  margin-right: 10px;
+  padding: 10px 15px; 
+}
+  
+.tab-buttons button.active {
+  background-color: #ddd;
+}
+
+.movie-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.movie-card {
+  width: 200px; /* 가로 고정 */
+  height: 320px; /* 세로 고정 */
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: #f4f4f4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* 상단 정렬 */
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.movie-card .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 8px;
+}
+.movie-card:hover .overlay {
+    opacity: 1;
+}
+.movie-card .overlay button,
+.movie-card .overlay a {
+  margin: 5px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #000;
+  cursor: pointer;
+  text-decoration: none;
+}
+.movie-card img {
+  width: 100%;
+  height: auto; 
+  max-height: 85%;
+  object-fit: cover;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 5px;
+  display: block;
+}
+.movie-card h2 {
+  font-size: 14px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  display: block;
+  width: 100%;
+  padding: 5px 5px;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.8);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin-top: 10px;
+  padding-top: 5px;
+}
+.movie-card h1 {
+  font-weight: normal;
+  margin: 0;
+  font-size: 15px;
+}
+
+.movie-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  font-size: 12px;
+  color: #888;
+}
+
+.movie-info span {
+  display: flex;
+  align-items: center;
+}
+
+.movie-info img {
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+}
+.movie-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; 
+  gap: 20px;
+  max-width: 1200px;
+}
+
+.sort-buttons {
+  display: flex;
+}
+  
+.sort-buttons button {
+  color: black;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  background-color: #f8f8f8;
+}
+  
+.sort-buttons button:hover {
+  background-color: #eee;
+}
+.movie-card .title {
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 5px;
+}

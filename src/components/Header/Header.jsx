@@ -104,7 +104,7 @@ const Header = () => {
                   <Link to="/admin/usermanagement" className="nav_menu_link">회원 관리</Link>
                 </li>
                 <li className="nav_menu_item">
-                  <Link to="/admin/movies" className="nav_menu_link">영화 관리</Link>
+                  <Link to="/admin/moviemanagement" className="nav_menu_link">영화 관리</Link>
                 </li>
                 <li className="nav_menu_item">
                   <Link to="/admin/theaters" className="nav_menu_link">극장 관리</Link>

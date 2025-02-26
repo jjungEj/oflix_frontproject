@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../components/css/MovieAdmin.css"; // 기존 CSS 사용
+import "../css/MovieAdmin.css"; 
 
-function MovieAdmin() {
+function MoviemanagementForm() {
   const [movies, setMovies] = useState([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("title");
@@ -16,7 +16,7 @@ function MovieAdmin() {
 
   const fetchMovies = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/movies?page=${page}&size=10`);
+      const response = await fetch(`/api/movies?page=${page}&size=10`);
       const data = await response.json();
       setMovies(data.content);
       setTotalPages(data.totalPages);
@@ -27,9 +27,7 @@ function MovieAdmin() {
 
   const handleSearch = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/movies/search/${filter}/${search}?page=0&size=10`
-      );
+      const response = await fetch(`/api/movies/search/${filter}/${encodeURIComponent(search)}?page=0&size=10`);
       const data = await response.json();
       setMovies(data.content);
       setTotalPages(data.totalPages);
@@ -44,9 +42,7 @@ function MovieAdmin() {
     if (!confirmDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:8080/api/movies/${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(`/api/movies/${id}`, {method: "DELETE",});
 
       if (response.ok) {
         alert("삭제되었습니다.");
@@ -58,6 +54,25 @@ function MovieAdmin() {
       console.error("삭제 중 오류 발생:", error);
       alert("삭제 중 오류가 발생했습니다.");
     }
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat("ko-KR").format(date);
+  };
+
+  /** 페이지네이션 버튼 생성 */
+  const renderPaginationButtons = () => {
+    const maxPagesToShow = 9; // 최대 표시할 페이지 버튼 수
+    const half = Math.floor(maxPagesToShow / 2);
+    let startPage = Math.max(0, page - half);
+    let endPage = Math.min(totalPages - 1, startPage + maxPagesToShow - 1);
+
+    if (endPage - startPage < maxPagesToShow - 1) {
+      startPage = Math.max(0, endPage - maxPagesToShow + 1);
+    }
+
+    return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
   };
 
   return (
@@ -76,8 +91,12 @@ function MovieAdmin() {
           onChange={(e) => setSearch(e.target.value)}
           className="search-input"
         />
-        <button onClick={handleSearch} className="search-button">검색</button>
-        <button onClick={() => navigate("/movies/create")} className="register-button">영화 등록</button>
+        <button onClick={handleSearch} className="search-button">
+          검색
+        </button>
+        <button onClick={() => navigate("/movies/create")} className="register-button">
+          영화 등록
+        </button>
       </div>
 
       {/* 영화 목록 테이블 */}
@@ -93,18 +112,25 @@ function MovieAdmin() {
         </thead>
         <tbody>
           {movies.map((movie) => (
-            <tr key={movie.id}>
-              <td>{movie.genre1}, {movie.genre2}</td>
-              <td>{movie.title}</td>
-              <td>{movie.releaseDate}</td>
+            <tr key={movie.movieId}>
               <td>
-                <button className="edit-button" onClick={() => navigate(`/movies/update/${movie.id}`)}>수정</button>
+                {movie.genre1}, {movie.genre2}
+              </td>
+              <td 
+                className="clickable-title"
+                onClick={() => navigate(`/movie/${movie.movieId}`)}
+              >{movie.title}</td>
+              <td>{formatDate(movie.releaseDate)}</td>
+              <td>
+                <button
+                  className="edit-button"
+                  onClick={() => navigate('/movies/update/${movie.movieId}')}
+                >
+                  수정
+                </button>
               </td>
               <td>
-                <button 
-                  className="delete-button"
-                  onClick={() => deleteMovie(movie.id)}
-                >
+                <button className="delete-button" onClick={() => deleteMovie(movie.movieId)}>
                   삭제
                 </button>
               </td>
@@ -115,22 +141,32 @@ function MovieAdmin() {
 
       {/* 페이지네이션 */}
       <div className="pagination">
-        <button 
-          onClick={() => setPage((prev) => Math.max(prev - 1, 0))} 
-          disabled={page === 0}
-        >
-          이전
+        {/* 이전 버튼 */}
+        <button onClick={() => setPage((prev) => Math.max(prev - 1, 0))} disabled={page === 0}>
+          {"<"}
         </button>
-        <span>{page + 1} / {totalPages}</span>
-        <button 
-          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages - 1))} 
+
+        {/* 페이지 숫자 버튼 */}
+        {renderPaginationButtons().map((pageNum) => (
+          <button
+            key={pageNum}
+            onClick={() => setPage(pageNum)}
+            className={pageNum === page ? "active-page" : ""}
+          >
+            {pageNum + 1}
+          </button>
+        ))}
+
+        {/* 다음 버튼 */}
+        <button
+          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages - 1))}
           disabled={page >= totalPages - 1}
         >
-          다음
+          {">"}
         </button>
       </div>
     </div>
   );
-}
+};
 
-export default MovieAdmin;
+export default MoviemanagementForm;

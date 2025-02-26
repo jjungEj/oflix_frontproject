@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate , Link} from 'react-router-dom';
 import { Box, Input, Button, VStack, Text } from '@chakra-ui/react';
 
 const LoginForm = () => {
@@ -70,7 +70,14 @@ const LoginForm = () => {
                         {errorMessage}
                     </Text>
                 )}
-
+                <Box display="flex" justifyContent="space-between" w="100%" fontSize="sm">
+                    <Link to="/find-id" style={{ color: '#3182ce', textDecoration: 'underline' }}>
+                        아이디 찾기
+                    </Link>
+                    <Link to="/reset-password" style={{ color: '#3182ce', textDecoration: 'underline' }}>
+                        비밀번호 찾기
+                    </Link>
+                </Box>
                 <Button colorScheme="red" w="100%" type="submit">
                     로그인
                 </Button>

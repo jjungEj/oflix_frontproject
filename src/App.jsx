@@ -46,6 +46,7 @@ function App() {
           <Route path="/movies/update/:movieId" element={<UpdateMovie />} />
           <Route path="/admin/moviemanagement" element={<Moviemanagement />} />
           <Route path="/admin/usermanagement" element={<Usermanagement />} />
+          <Route path="/find/find-username" element={<FindeId />} />
 
           <Route path="/mypage" element={<User />} /> 
           <Route path="/mypage/reservations" element={<MyReservation />} /> 

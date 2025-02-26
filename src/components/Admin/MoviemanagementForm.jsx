@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/MovieAdmin.css"; 
-
+import { Button, Input} from '@chakra-ui/react';
 function MoviemanagementForm() {
   const [movies, setMovies] = useState([]);
   const [search, setSearch] = useState("");
@@ -47,9 +47,14 @@ function MoviemanagementForm() {
       if (response.ok) {
         alert("삭제되었습니다.");
         fetchMovies(); // 삭제 후 목록 갱신
-      } else {
-        alert("삭제에 실패했습니다.");
-      }
+        } else {
+          const errorText = await response.text();
+            if (errorText.includes("스케줄에 등록된 영화는 삭제할 수 없습니다")) {
+              alert("스케줄에 등록된 영화는 삭제할 수 없습니다.");
+            } else {
+              alert("삭제에 실패했습니다.");
+            }
+          }
     } catch (error) {
       console.error("삭제 중 오류 발생:", error);
       alert("삭제 중 오류가 발생했습니다.");
@@ -84,19 +89,35 @@ function MoviemanagementForm() {
           <option value="actors">배우</option>
           <option value="director">감독</option>
         </select>
-        <input
+        <Input
           type="text"
           placeholder="검색어 입력"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="search-input"
+          variant="outline" 
+          size="md" 
+          width="200px"
+          focusBorderColor="blue.500" 
+          borderRadius="md" 
         />
-        <button onClick={handleSearch} className="search-button">
+        <Button 
+          onClick={handleSearch}
+          bg="white" 
+          color="black" 
+          border="1px solid gray" 
+          _hover={{ bg: "gray.200" }}
+        >
           검색
-        </button>
-        <button onClick={() => navigate("/movies/create")} className="register-button">
+        </Button>
+        <Button 
+          onClick={() => navigate("/movies/create")}
+          bg="white" 
+          color="black" 
+          border="1px solid gray" 
+          _hover={{ bg: "gray.200" }}
+        >
           영화 등록
-        </button>
+        </Button>
       </div>
 
       {/* 영화 목록 테이블 */}
@@ -122,17 +143,26 @@ function MoviemanagementForm() {
               >{movie.title}</td>
               <td>{formatDate(movie.releaseDate)}</td>
               <td>
-                <button
-                  className="edit-button"
-                  onClick={() => navigate('/movies/update/${movie.movieId}')}
-                >
+                <Button 
+                  onClick={() => navigate(`/movies/update/${movie.movieId}`)}
+                  bg="white" 
+                  color="black" 
+                  border="1px solid gray" 
+                  _hover={{ bg: "gray.200" }}
+                  >
                   수정
-                </button>
+                </Button>
               </td>
               <td>
-                <button className="delete-button" onClick={() => deleteMovie(movie.movieId)}>
+                <Button 
+                  onClick={() => deleteMovie(movie.movieId)}
+                  bg="white" 
+                  color="black" 
+                  border="1px solid gray" 
+                  _hover={{ bg: "gray.200" }}
+                  >
                   삭제
-                </button>
+                </Button>
               </td>
             </tr>
           ))}

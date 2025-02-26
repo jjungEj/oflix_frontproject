@@ -17,11 +17,6 @@ import "./components/css/reservation.css"
 import "./components/css/paymentSuccess.css"
 import CreateMovie from './pages/CreateMovie';
 import UpdateMovie from './pages/UpdateMovie';
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-
-import "./components/css/movies.css";
-import "./components/css/MovieAdmin.css";
 
 import MovieDetailForm from './components/Movie/MovieDetailForm';
 import Usermanagement from "./pages/Usermanagement";

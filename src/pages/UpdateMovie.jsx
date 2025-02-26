@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import "../components/css/createMovie.css";
 
 const UpdateMovie = () => {
   const { movieId } = useParams();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: "",
     releaseDate: "",
@@ -31,7 +33,8 @@ const UpdateMovie = () => {
         const response = await fetch(`http://localhost:8080/api/movies/${movieId}`);
         if (response.ok) {
           const data = await response.json();
-          setFormData({
+          setFormData((prevData) => ({
+            ...prevData,
             title: data.title,
             releaseDate: data.releaseDate,
             director: data.director,
@@ -44,7 +47,7 @@ const UpdateMovie = () => {
             genre1: data.genre1,
             genre2: data.genre2,
             movieStatus: data.movieStatus,
-          });
+          }));
           setExistingImages(data.images || []);
         } else {
           window.alert("영화 정보를 불러오는 데 실패했습니다.");
@@ -59,7 +62,10 @@ const UpdateMovie = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleMainPosterChange = (e) => {
@@ -72,6 +78,17 @@ const UpdateMovie = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("제출 전 formData:", formData);
+    const today = new Date();
+    const todayString = today.toISOString().split("T")[0];
+
+    if (
+      (formData.movieStatus === "NOW_SHOWING" && formData.releaseDate > todayString) ||
+      (formData.movieStatus === "COMING_SOON" && formData.releaseDate <= todayString)
+    ) {
+      window.alert("개봉일과 영화 상태가 일치하지 않습니다. 다시 확인해주세요!");
+      return;
+    }
 
     const data = new FormData();
     const movieJson = JSON.stringify(formData);
@@ -96,6 +113,7 @@ const UpdateMovie = () => {
 
       if (response.ok) {
         window.alert("영화 정보가 수정되었습니다!");
+        navigate("/admin/moviemanagement");
       } else {
         window.alert("다시 작성해주세요!");
       }
@@ -235,7 +253,7 @@ const UpdateMovie = () => {
         </div>
 
         <div className="buttonGroup">
-        <Link to="/movies">
+        <Link to="/admin/moviemanagement">
             <button type="button" className="resetButton">취소</button>
         </Link>
           <button type="submit">영화 정보 수정</button> {/* 영화 등록 성공하면 관리페이지로 이동 추가 */}

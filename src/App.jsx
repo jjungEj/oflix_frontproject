@@ -26,7 +26,7 @@ import MovieDetailForm from './components/Movie/MovieDetailForm';
 import Usermanagement from "./pages/Usermanagement";
 import Moviemanagement from "./pages/Moviemanagement";
 import FindId from "./pages/FindId";
-import ResetPassword from "./Pages/ResetPassword";
+import ResetPassword from "./pages/ResetPassword";
 import UserMyPage from "./pages/UserMyPage";
 
 

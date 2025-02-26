@@ -71,7 +71,7 @@ const LoginForm = () => {
                     </Text>
                 )}
                 <Box display="flex" justifyContent="space-between" w="100%" fontSize="sm">
-                    <Link to="/find-id" style={{ color: '#3182ce', textDecoration: 'underline' }}>
+                    <Link to="/find/find-username" style={{ color: '#3182ce', textDecoration: 'underline' }}>
                         아이디 찾기
                     </Link>
                     <Link to="/reset-password" style={{ color: '#3182ce', textDecoration: 'underline' }}>

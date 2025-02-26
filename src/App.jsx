@@ -29,7 +29,7 @@ import Moviemanagement from "./pages/Moviemanagement";
 =======
 import FindId from "./pages/FindId";
 import ResetPassword from "./Pages/ResetPassword";
->>>>>>> 2011ab0 (feat : password찾아서 새로설정)
+import UserMyPage from "./pages/UserMyPage";
 
 
 

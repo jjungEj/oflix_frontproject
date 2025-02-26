@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Input, VStack, Text, Spinner, HStack } from "@chakra-ui/react";
-import Header from "../components/Header/Header";
+import Header from "../Header/Header";
 
 const User = () => {
     const [user, setUser] = useState(null);
@@ -75,9 +75,55 @@ const User = () => {
         }
     };
 
+    const handleLogout = async () => {
+        try {
+          const response = await fetch("/logout", {
+            method: "POST",
+            credentials: "include",
+          });
+    
+          if (!response.ok) {
+            throw new Error("로그아웃 실패");
+          }
+    
+          setRole(null);
+          navigate("/");
+        } catch (error) {
+          console.error("로그아웃 실패:", error);
+        }
+      };
+    
+
+      const handleDeleteUser = async () => {
+        if (!window.confirm("정말로 회원 탈퇴를 하시겠습니까?")) return;
+    
+        try {
+            setIsLoading(true);
+            const response = await fetch(`/api/user/delete?username=${user.username}`, {
+                method: "DELETE",
+                credentials: "include",
+            });
+    
+            if (!response.ok) {
+                throw new Error("회원 탈퇴 실패");
+            }
+    
+            // 회원 탈퇴 성공하면 기존 handleLogout 실행
+            await handleLogout();
+    
+            alert("회원 탈퇴가 완료되었습니다.");
+        } catch (error) {
+            console.error("회원 탈퇴 실패:", error);
+            alert("회원 탈퇴에 실패했습니다.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    
+    
+
     return (
         <>
-            <Header />
             <Box className="container" p={5}>
                 <Text fontSize="2xl" mb={4}>User</Text>
                 {isLoading ? (
@@ -108,7 +154,10 @@ const User = () => {
                         </HStack>
 
                         <Button colorScheme="blue" onClick={handleUpdate}>수정하기</Button>
+
+                        <Button colorScheme="red" onClick={handleDeleteUser}>회원 탈퇴</Button>
                     </VStack>
+                    
                 ) : (
                     <Text>유저 정보를 불러오는 중...</Text>
                 )}

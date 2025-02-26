@@ -3,8 +3,9 @@ body {
     font-family: Arial, sans-serif;
   }
   
-  .container {
-    max-width: 900px;
+  .reservation_container {
+    width: 100%;
+    /* max-width: 1200px; */
     margin: 0 auto;
     margin-bottom: 100px;
     padding: 20px;
@@ -108,7 +109,7 @@ body {
   
   .reserve-button:disabled {
     background: #bbb;
-    cursor: 
+    cursor: pointer;
   }
   
   .theater-info {
@@ -599,9 +600,9 @@ body {
     cursor: pointer;
     transition: background-color 0.2s;
   }
-      /* 결재하기 화면 */
+  /* 결재하기 화면 */
   .payment-container {
-    padding: 20px;
+    padding: 15px;
   }
   
   .payment-content {

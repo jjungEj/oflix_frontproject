@@ -26,6 +26,10 @@ import "./components/css/MovieAdmin.css";
 import MovieDetailForm from './components/Movie/MovieDetailForm';
 import Usermanagement from "./pages/Usermanagement";
 import Moviemanagement from "./pages/Moviemanagement";
+=======
+import FindId from "./pages/FindId";
+import ResetPassword from "./Pages/ResetPassword";
+import UserMyPage from "./pages/UserMyPage";
 
 
 
@@ -46,6 +50,8 @@ function App() {
           <Route path="/movies/update/:movieId" element={<UpdateMovie />} />
           <Route path="/admin/moviemanagement" element={<Moviemanagement />} />
           <Route path="/admin/usermanagement" element={<Usermanagement />} />
+          <Route path="/find/find-username" element={<FindId />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
           <Route path="/mypage" element={<User />} /> 
           <Route path="/mypage/reservations" element={<MyReservation />} /> 

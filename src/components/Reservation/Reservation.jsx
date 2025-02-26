@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; 
 
 const PAYMENT_METHODS = [
   { id: 'naver', name: '네이버페이', icon: '네이버페이_아이콘_URL' },
@@ -9,16 +10,18 @@ const PAYMENT_METHODS = [
 export default function Reservation() {
   const [selectedCinema, setSelectedCinema] = useState(null);
   const [selectedMovie, setSelectedMovie] = useState(null);
-    const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
   const [currentStep, setCurrentStep] = useState(1);
   const [cinemas, setCinemas] = useState([]);
-const [movies, setMovies] = useState({});
+  const [movies, setMovies] = useState({});
   const [isDataFetching, setIsDataFetching] = useState(false);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [selectedSeatInfo, setSelectedSeatInfo] = useState(null);
-const [selectedTickets, setSelectedTickets] = useState([]);  
+  const [selectedTickets, setSelectedTickets] = useState([]);  
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
 
   const TICKET_TYPES = [
     { id: 'adult', name: '일반', price: 13000 },
@@ -26,6 +29,29 @@ const [selectedTickets, setSelectedTickets] = useState([]);
     { id: 'child', name: '어린이', price: 7000 },
   ];
 
+  const fetchUserInfo = async () => {
+    try {
+        const response = await fetch("/api/user/userInfo", {
+            method: "GET",
+            credentials: "include",
+        });
+
+        if (!response.ok) {
+            throw new Error("유저 정보 불러오기 실패");
+        }
+
+        const data = await response.json();
+        setUser(data.username); 
+
+        if (!data.username) {
+          navigate("/login");
+        }
+    } catch (error) {
+        console.error("유저 정보 불러오기 실패:", error);
+        navigate("/login");
+    }
+  }
+  
   const createScheduleObject = (schedule) => ({
     id: schedule.scheduleId,
     startTime: schedule.startTime,
@@ -98,6 +124,7 @@ const [selectedTickets, setSelectedTickets] = useState([]);
     };
 
     fetchSchedules();
+    fetchUserInfo();
   }, []);
 
   const handleNextStep = () => {
@@ -186,11 +213,12 @@ setSelectedSeats([...selectedSeats, seatIndex]);
         scheduleId: selectedTime,
         seats: selectedSeats,
         tickets: selectedTickets,
-        totalAmount: totalAmount
+        totalAmount: totalAmount,
+        username: user
       };
       
       const encodedData = encodeURIComponent(JSON.stringify(reservationData));
-
+      
       if (!window.oPay) {
         console.error('네이버페이가 초기화되지 않았습니다.');
         return;
@@ -232,7 +260,7 @@ setSelectedSeats([...selectedSeats, seatIndex]);
   };
 
   return (
-    <div className="container">
+    <div className="reservation_container">
       <header className="reservation_header">
         <h1>예매하기</h1>
       </header>

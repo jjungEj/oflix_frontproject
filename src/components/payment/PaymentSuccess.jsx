@@ -7,7 +7,7 @@ const PaymentSuccess = () => {
   const [isLoading, setIsLoading] = useState(true);
   const isRequestSent = useRef(false); 
   const [okPaymentId, setOkPaymentId] = useState(null);
-
+  
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const resultCode = params.get('resultCode');
@@ -15,7 +15,7 @@ const PaymentSuccess = () => {
     const encodedReservation = params.get('reservation');
 
     if (resultCode === 'Success') {
-      console.log('Payment successful:', { paymentId });
+
       setOkPaymentId(paymentId);
       const sendPaymentResult = async () => {
         if (isRequestSent.current) return; 
@@ -32,11 +32,9 @@ const PaymentSuccess = () => {
             scheduleId: reservationData?.scheduleId,
             tickets: reservationData?.tickets || [],
             totalAmount: reservationData?.totalAmount,
-            userId: 1, //TODO test용 user ID
+            useremail: reservationData?.username,
             paymentMethod: 'naver'
           };
-
-          console.log('Sending to server:', paymentInfo);
 
           await fetch('http://localhost:8080/api/payment/complete', {
             method: 'POST',

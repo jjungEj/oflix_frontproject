@@ -16,6 +16,7 @@ import "./components/css/global.css";
 import "./components/font/gfont.css";
 import "./components/css/reservation.css"
 import "./components/css/paymentSuccess.css"
+import "./components/css/MyReservation.css"
 import CreateMovie from './pages/CreateMovie';
 import UpdateMovie from './pages/UpdateMovie';
 import "slick-carousel/slick/slick.css";

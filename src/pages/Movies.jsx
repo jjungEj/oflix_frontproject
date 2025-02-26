@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../components/css/movies.css';
 import Header from '../components/Header/Header';
-
+import { Button, ButtonGroup} from '@chakra-ui/react';
 function Movies() {
     const [selectedTab, setSelectedTab] = useState('now');
     const [nowMovies, setNowMovies] = useState([]);
@@ -78,16 +78,44 @@ function Movies() {
         <div className="movie-page">
             <div className="tab-buttons-container">
                 <div className="tab-buttons">
-                    <button className={selectedTab === 'now' ? 'active' : ''} onClick={() => setSelectedTab('now')}>
-                        현재 상영작
-                    </button>
-                    <button className={selectedTab === 'coming' ? 'active' : ''} onClick={() => setSelectedTab('coming')}>
-                        상영 예정작
-                    </button>
+                <ButtonGroup isAttached>
+                    <Button
+                      bg={selectedTab === "now" ? "gray.400" : "gray.300"}
+                      color="black"
+                      _hover={{ bg: "gray.400" }}
+                      onClick={() => setSelectedTab("now")}
+                    >
+                    현재 상영작
+                    </Button>
+                    <Button
+                      bg={selectedTab === "coming" ? "gray.400" : "gray.300"}
+                      color="black"
+                      _hover={{ bg: "gray.400" }}
+                      onClick={() => setSelectedTab("coming")}
+                    >
+                    상영 예정작
+                    </Button>
+                </ButtonGroup>
                 </div>
                 <div className="sort-buttons">
-                    <button onClick={() => setSortOption('latest')}>최신순</button>
-                    <button onClick={() => setSortOption('alphabetical')}>가나다순</button>
+                    <ButtonGroup isAttached>
+                    <Button
+                      bg={selectedTab === "now" ? "gray.400" : "gray.300"}
+                      color="black"
+                      _hover={{ bg: "gray.400" }}
+                      onClick={() => setSortOption('latest')}
+                    >
+                    최신순
+                    </Button>
+                    <Button
+                      bg={selectedTab === "coming" ? "gray.400" : "gray.300"}
+                      color="black"
+                      _hover={{ bg: "gray.400" }}
+                      onClick={() => setSortOption('alphabetical')}
+                    >
+                    가나다순
+                    </Button>
+                </ButtonGroup>
                 </div>
             </div>
             <div className="movie-list">

@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "../components/css/Home.css";
 import Header from '../components/Header/Header';
+import { Link } from "react-router-dom";
 
 const Home = () => {
     const [nowMovies, setNowMovies] = useState([]);
     const [comingMovies, setComingMovies] = useState([]);
+    const [movie, setMovie] = useState(null);
+    const [stillCuts, setStillCuts] = useState([]);
+    const [banner, setBanner] = useState(""); 
+    const [movieId, setMovieId] = useState(4);
 
     const MOVIE_STATUS = {
         NOW_SHOWING: 'NOW_SHOWING',
@@ -54,14 +59,47 @@ const Home = () => {
             console.error("영화 목록을 가져오는 중 오류 발생:", error);
         }
     };
-
+    const fetchMovie = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/movies/${movieId}`);
+            if (!response.ok) {
+                throw new Error("영화를 찾을 수 없습니다.");
+            }
+            const data = await response.json();
+            setMovie(data);
+    
+            if (data.images && Array.isArray(data.images)) {
+                const filteredCuts = data.images.filter((img) => img.imageType === "STILL");
+                setStillCuts(filteredCuts);
+                
+                // ✅ filteredCuts가 비어있지 않을 때만 banner 설정
+                if (filteredCuts.length > 0) {
+                    setBanner(filteredCuts[0].imagePath);
+                }
+            }
+    
+        } catch (err) {
+            console.error("영화를 불러오는 중 오류 발생:", err);
+        }
+    };
     useEffect(() => {
         fetchAllMovies();
-    }, []);
+        fetchMovie();
+    }, [movieId]);
     return (
         <>
             <Header />
-            
+            {/* 단일 배너 이미지 */}
+            <div className="banner">
+                <Link to={`/movie/${movieId}`}>
+                    {/* banner 값이 존재할 때만 표시 */}
+                    {banner ? (
+                        <img src={banner} className="banner-image" alt="Banner" />
+                    ) : (
+                        <p>배너 이미지를 불러오는 중...</p>
+                    )}
+                </Link>
+            </div>
             <div className="movie-page">
             {/* 현재 상영작 Top 5 */}
             <div className="movie-list">

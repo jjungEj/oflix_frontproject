@@ -2,7 +2,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Join from "./pages/Join";
-import User from "./pages/User";
 import MyReservation from "./pages/MyReservation.jsx";
 import Home from "./pages/Home";
 import Admin from "./components/Admin/UsermanagementForm";
@@ -26,7 +25,6 @@ import "./components/css/MovieAdmin.css";
 import MovieDetailForm from './components/Movie/MovieDetailForm';
 import Usermanagement from "./pages/Usermanagement";
 import Moviemanagement from "./pages/Moviemanagement";
-=======
 import FindId from "./pages/FindId";
 import ResetPassword from "./Pages/ResetPassword";
 import UserMyPage from "./pages/UserMyPage";
@@ -53,7 +51,7 @@ function App() {
           <Route path="/find/find-username" element={<FindId />} />
           <Route path="/reset-password" element={<ResetPassword />} />
 
-          <Route path="/mypage" element={<User />} /> 
+          <Route path="/mypage" element={<UserMyPage />} /> 
           <Route path="/mypage/reservations" element={<MyReservation />} /> 
 
           <Route path="/adminpage" element={<Admin />} /> 

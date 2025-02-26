@@ -79,6 +79,9 @@ const Header = () => {
                   <Link to="/mypage" className="member_info_link">마이페이지</Link>
                 </li>
                 <li className="member_info_item">
+                  <Link to="/mypage/reservations" className="member_info_link">예매정보</Link>
+                </li>
+                <li className="member_info_item">
                   <button className="logout-button" onClick={handleLogout}>로그아웃</button>
                 </li>
               </>
@@ -123,9 +126,6 @@ const Header = () => {
                 </li>
                 <li className="nav_menu_item">
                   <Link to="/theaters" className="nav_menu_link">극장</Link>
-                </li>
-                <li className="nav_menu_item">
-                  <Link to="/events" className="nav_menu_link">이벤트</Link>
                 </li>
               </>
             ) : (

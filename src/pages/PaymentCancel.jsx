@@ -1,16 +1,16 @@
 import React from 'react'
 import Header from '../components/Header/Header'
-import PaymentSuccess from '../components/payment/PaymentSuccess'
+import PaymentCancel from '../components/payment/PaymentCancel'
 
-const PaymentsSuccess = () => {
+const PaymentsCencel = () => {
     return (
         <>
             <Header />
             <div className='container'>
-                <PaymentSuccess />
+                <PaymentCancel />
             </div>
         </>
     )
 }
 
-export default PaymentsSuccess;
+export default PaymentsCencel;

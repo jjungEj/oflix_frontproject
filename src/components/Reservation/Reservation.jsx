@@ -107,7 +107,7 @@ export default function Reservation() {
     const fetchSchedules = async () => {
       setIsDataFetching(true);
       try {
-        const response = await fetch("http://localhost:8080/api/schedules");
+        const response = await fetch("/api/schedules");
         const data = await response.json();
         console.log("data : ", data);
         if (!Array.isArray(data)) {

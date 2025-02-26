@@ -6,31 +6,31 @@
 }
 
 .tab-buttons-container {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 1200px;
-    padding: 0 20px;
-    box-sizing: border-box;
-    margin-bottom: 20px;
-  }
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  display: flex;
+}
   
-  .tab-buttons {
-    display: flex;
-  }
+.tab-buttons {
+  display: flex;
+}
   
-  .tab-buttons button {
-    padding: 10px 15px; 
-    border: 1px solid #ccc; 
-    background-color: #f9f9f9; 
-    cursor: pointer;
-    border-radius: 5px; 
-    margin-right: 10px;
-  }
+.tab-buttons button {
+  border: 1px solid #ccc; 
+  background-color: #f9f9f9; 
+  cursor: pointer;
+  border-radius: 5px; 
+  margin-right: 10px;
+  padding: 10px 15px; 
+}
   
-  .tab-buttons button.active {
-    background-color: #ddd;
-  }
+.tab-buttons button.active {
+  background-color: #ddd;
+}
 
 .movie-list {
   display: flex;
@@ -116,10 +116,10 @@
   padding-top: 5px;
 }
 .movie-card h1 {
-    font-size: 15px;
-    font-weight: normal;
-    margin: 0;
-  }
+  font-weight: normal;
+  margin: 0;
+  font-size: 15px;
+}
 
 .movie-info {
   display: flex;
@@ -149,23 +149,22 @@
 }
 
 .sort-buttons {
-    display: flex;
-  }
+  display: flex;
+}
   
-  .sort-buttons button {
-    padding: 10px 15px;
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-right: 10px;
-  }
+.sort-buttons button {
+  color: black;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  background-color: #f8f8f8;
+}
   
-  .sort-buttons button:hover {
-    background-color: #eee;
-  }
-  .movie-card .title {
-    font-size: 14px;
-    font-weight: bold;
-    margin-top: 5px;
-  }
+.sort-buttons button:hover {
+  background-color: #eee;
+}
+.movie-card .title {
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 5px;
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
     Box, Button, Text, Heading, Grid, GridItem, HStack,
+    Center,
 } from '@chakra-ui/react';
 
 const UsermanagementForm = () => {
@@ -107,7 +108,7 @@ const UsermanagementForm = () => {
             )}
 
             {/* 정렬 기준 선택 드롭다운 */}
-            <div style={{ marginBottom: '16px', display: 'flex', alignItems: 'center' }}>
+            <div style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                 <span>정렬 기준:</span>
                 <select 
                     value={sortBy} 
@@ -152,7 +153,7 @@ const UsermanagementForm = () => {
 
             {users.length > 0 ? (
                 users.map(user => (
-                    <Grid templateColumns="repeat(6, 1fr)" gap={6} key={user.id} p={4} borderWidth={1} borderRadius="md" boxShadow="sm">
+                    <Grid templateColumns="repeat(6, 1fr)" gap={6} key={user.id} p={4} borderWidth={1} borderRadius="md" boxShadow="sm" textAlign={"center"}>
                         <GridItem>{user.id}</GridItem>
                         <GridItem>{user.username}</GridItem>
                         <GridItem>{user.nickname}</GridItem>
@@ -199,7 +200,7 @@ const UsermanagementForm = () => {
             )}
 
             {/* 페이지네이션 버튼 */}
-            <HStack mt={4}>
+            <HStack mt={4} justify={"center"}>
                 <Button 
                     onClick={() => setPage(prevPage => Math.max(prevPage - 1, 0))}
                     isDisabled={page === 0}

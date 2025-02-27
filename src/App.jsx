@@ -28,6 +28,7 @@ import Moviemanagement from "./pages/Moviemanagement";
 import FindId from "./pages/FindId";
 import ResetPassword from "./pages/ResetPassword";
 import UserMyPage from "./pages/UserMyPage";
+import MovieTicketApp from "./pages/MovieTicketApp";
 
 
 
@@ -54,7 +55,8 @@ function App() {
           <Route path="/mypage" element={<UserMyPage />} /> 
           <Route path="/mypage/reservations" element={<MyReservation />} /> 
 
-          <Route path="/adminpage" element={<Admin />} /> 
+          <Route path="/adminpage" element={<Admin />} />
+          <Route path="/theaters" element={<MovieTicketApp />} />
         </Routes>
     </Router>
   );

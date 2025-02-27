@@ -233,7 +233,7 @@ setSelectedSeats([...selectedSeats, seatIndex]);
         totalPayAmount: String(totalAmount),
         taxScopeAmount: String(totalAmount),
         taxExScopeAmount: "0",
-        returnUrl: `http://localhost:5173/payment/success?reservation=${encodedData}`,
+        returnUrl: `/payment/success?reservation=${encodedData}`,
         onAuthorize: function(response) {
           console.log('Payment authorized:', response);
           if (response.resultCode !== 'Success') {

@@ -76,7 +76,7 @@ const UpdateMovie = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("제출 전 formData:", formData);
+    
     const today = new Date().toISOString().split("T")[0];
 
     if (

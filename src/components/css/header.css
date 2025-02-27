@@ -24,13 +24,14 @@
 
 .header_logo {
   display: inline-flex;
-  align-items: flex-end;
-  height: 53px;
-  margin-left: 44px;
+  align-items: flex-start;
+  height: 80px;
+  margin-left: 675px;
 }
 
 .header_logo_link {
   display: block;
+  width: 100%;
   float: left;
   height: 100%;
 }
@@ -39,6 +40,7 @@
   display: block;
   width: auto;
   height: 100%;
+  align-items: center;
   object-fit: contain;
 }
 

@@ -109,7 +109,7 @@ export default function Reservation() {
       try {
         const response = await fetch("/api/schedules");
         const data = await response.json();
-        console.log("data : ", data);
+        
         if (!Array.isArray(data)) {
           throw new Error('Invalid API response format');
         }

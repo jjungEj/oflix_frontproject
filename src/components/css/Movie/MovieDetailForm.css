@@ -32,11 +32,13 @@
 
 .movieDetail_title {
   padding-top: 5%;
+  text-align: left;
 }
 
 .title {
   font-size: 30px;
   font-weight: bold;
+  text-align: left;
 }
 
 .movieMeta {

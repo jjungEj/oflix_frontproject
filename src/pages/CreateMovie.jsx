@@ -82,7 +82,7 @@ const CreateMovie = () => {
         setMainPoster(null);
         setStillCuts([]);
 
-        navigate("/movieAdmin");
+        navigate("/admin/moviemanagement");
       } else {
         window.alert("다시 등록해주세요.");
       }
@@ -222,7 +222,7 @@ const CreateMovie = () => {
             </div>
 
             <div className="buttonGroup">
-              <Link to='/movieAdmin'>
+              <Link to='/admin/moviemanagement'>
                 <button type="button" className="resetButton">취소</button>
               </Link>
               <button type="submit">등록</button> {/* 영화 등록 성공하면 관리페이지로 이동 추가 */}

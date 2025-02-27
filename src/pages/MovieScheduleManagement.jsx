@@ -13,7 +13,7 @@ const MovieScheduleManagement = () => {
     // 영화관 목록 가져오기
     const fetchCinemas = async () => {
         try {
-            const response = await fetch("http://localhost:8080/api/Allcinemas");
+            const response = await fetch("/api/Allcinemas");
             const data = await response.json();
             setCinemas(data);
             if (data.length > 0) {
@@ -27,7 +27,7 @@ const MovieScheduleManagement = () => {
     // 선택된 영화관의 스케줄 가져오기
     const fetchSchedules = async (cinemaId) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/schedule/${cinemaId}`);
+            const response = await fetch(`/api/schedule/${cinemaId}`);
             const data = await response.json();
             setSchedules(data);
         } catch (error) {
@@ -56,7 +56,7 @@ const MovieScheduleManagement = () => {
         if (!confirmDelete) return;
     
         try {
-          const response = await fetch(`http://localhost:8080/api/schedule/${scheduleId}`, {method: "DELETE",});
+          const response = await fetch(`/api/schedule/${scheduleId}`, {method: "DELETE",});
     
           if (response.ok) {
             alert("삭제되었습니다.");

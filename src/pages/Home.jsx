@@ -61,7 +61,7 @@ const Home = () => {
     };
     const fetchMovie = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/movies/${movieId}`);
+            const response = await fetch(`/api/movies/${movieId}`);
             if (!response.ok) {
                 throw new Error("영화를 찾을 수 없습니다.");
             }

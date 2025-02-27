@@ -1,5 +1,21 @@
 import React, { useEffect, useState } from "react";
 
+const formatDate = (dateArray) => {
+
+    if (!dateArray || dateArray.length < 6) return "유효하지 않은 시간"; // 데이터가 부족한 경우 처리
+
+    // 월이 0부터 시작하므로 3은 2로 변환
+    const date = new Date(dateArray[0], dateArray[1] - 1, dateArray[2], dateArray[3], dateArray[4], dateArray[5]);
+    
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+  
+    return `${year}년 ${month}월 ${day}일 ${hour}시 ${minute}분`; 
+  };
+
 const MyReservation = () => {
     const [reservations, setReservations] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -20,6 +36,7 @@ const MyReservation = () => {
 
             const reservationInfo = await response.json();
             setReservations(reservationInfo);
+
 
         } catch (error) {
             console.error("예매 정보 불러오기 실패:", error);
@@ -70,9 +87,10 @@ const MyReservation = () => {
 
     return (
         <>
-            <div className="myReservation_container">
-                <h2>내 예매 내역</h2>
-
+          <div className="myReservation_container">
+            <header className="reservation_header">
+              <h1>예매내역</h1>
+            </header>
                 {isLoading ? (
                     <p>로딩 중...</p>
                 ) : reservations.length > 0 ? (
@@ -84,6 +102,8 @@ const MyReservation = () => {
                                 <p><strong>상영관:</strong> {reservation.theaterHall}</p>
                                 <p><strong>좌석 번호:</strong> {reservation.seatNumber}</p>
                                 <p><strong>결제 상태:</strong> {reservation.status}</p>
+                                 <p><strong>시작 시간:</strong> {formatDate(reservation.startTime)}</p>
+                                 <p><strong>종료 시간:</strong> {formatDate(reservation.endTime)}</p>
 
                                 <button
                                     onClick={() => openModal(reservation)}

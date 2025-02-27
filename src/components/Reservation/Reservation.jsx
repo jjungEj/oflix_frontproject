@@ -486,20 +486,22 @@ setSelectedSeats([...selectedSeats, seatIndex]);
           <div className="payment-content">
             <div className="payment-left">
               <div className="movie-info">
-                <img src={selectedMovie?.poster} alt={selectedMovie?.title} className="movie-poster" />
+                <div>
+                  <img src={selectedMovie?.poster} alt={selectedMovie?.title} className="movie-poster" />
+                </div>
                 <div className="movie-details">
-                  <h3>{selectedMovie?.title}</h3>
-                  <p>{selectedCinema?.name}</p>
-                  <p>
+                  <h3 className="movie-details-h3">영화 제목 : {selectedMovie?.title}</h3>
+                  <p className="movie-details-p">지점 : {selectedCinema?.name}</p>
+                  <p className="movie-details-p">상영 시작 시간 : 
                     {selectedTime ? new Date(selectedMovie?.schedules.find(s => s.id === selectedTime)?.startTime).toLocaleDateString() : ""} {" "}
                     {selectedTime ? formatTime(selectedMovie?.schedules.find(s => s.id === selectedTime)?.startTime) : ""}
                   </p>
-                  <p>선택좌석: {selectedTickets.map(ticket => ticket.seatLabel).join(', ')}</p>
+                  <p className="movie-details-p">선택 좌석: {selectedTickets.map(ticket => ticket.seatLabel).join(', ')}</p>
                 </div>
               </div>
 
               <div className="payment-methods">
-                <h3>결제수단 선택</h3>
+                <h3 className="movie-details-h3">결제수단 선택</h3>
                 <div className="payment-options">
                   {PAYMENT_METHODS.map(method => (
                     <button
@@ -547,7 +549,7 @@ setSelectedSeats([...selectedSeats, seatIndex]);
               </div>
             </div>
           </div>
-              </div>
+        </div>
             )}
       {}
       {showPopup && (

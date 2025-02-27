@@ -28,7 +28,7 @@ const UpdateMovie = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/api/movies/${movieId}`);
+        const response = await fetch(`/api/movies/${movieId}`);
         if (response.ok) {
           const data = await response.json();
           setFormData((prevData) => ({
@@ -95,7 +95,7 @@ const UpdateMovie = () => {
     stillCuts.forEach((file) => data.append("still", file));
 
     try {
-      const response = await fetch(`http://localhost:8080/api/movies/${movieId}`, {
+      const response = await fetch(`/api/movies/${movieId}`, {
         method: "PUT",
         body: data,
       });

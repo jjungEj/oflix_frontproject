@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { Box, Text, Button} from "@chakra-ui/react";
 import "../css/Movie/movieDetailForm.css";
 import Header from "../Header/Header.jsx";
-// movieDetailForm -> MovieDetailForm
+
 function MovieDetailForm() {
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
@@ -62,7 +62,7 @@ function MovieDetailForm() {
 
   const fetchMovie = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/movies/${movieId}`);
+      const response = await fetch(`/api/movies/${movieId}`);
       if (!response.ok) {
         throw new Error("영화를 찾을 수 없습니다.");
       }

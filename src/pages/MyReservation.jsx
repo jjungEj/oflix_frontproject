@@ -8,7 +8,7 @@ const MyReservations = () => {
     return (
         <>
             <Header />
-            <div className='container'>
+            <div>
                 <MyReservation />
             </div>
         </>

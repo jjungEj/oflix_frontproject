@@ -79,7 +79,7 @@ const Header = () => {
                   <Link to="/mypage" className="member_info_link">마이페이지</Link>
                 </li>
                 <li className="member_info_item">
-                  <Link to="/mypage/reservations" className="member_info_link">예매정보</Link>
+                  <Link to="/mypage/reservations" className="member_info_link">예매내역</Link>
                 </li>
                 <li className="member_info_item">
                   <button className="logout-button" onClick={handleLogout}>로그아웃</button>

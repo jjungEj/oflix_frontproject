@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { Box, Text, Button} from "@chakra-ui/react";
 import "../css/Movie/MovieDetailForm.css";
 import Header from "../Header/Header.jsx";
-
+// movieDetailForm -> MovieDetailForm
 function MovieDetailForm() {
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);

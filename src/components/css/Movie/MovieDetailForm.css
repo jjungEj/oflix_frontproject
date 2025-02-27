@@ -27,6 +27,7 @@
   flex-direction: column;
   justify-content: flex-start;
   gap: 7px;
+  text-align: left;
 }
 
 .movieDetail_title {
@@ -42,11 +43,13 @@
   font-size: 16px;
   color: gray;
   margin-bottom: 10px;
+  text-align: left;
 }
 
 .metaDetail {
   font-size: 19px;
   color: #333;
+  text-align: left;
 }
 
 .button{
@@ -80,6 +83,7 @@
   font-size: 16px;
   line-height: 1.8;
   color: #333;
+  text-align: left;
 }
 
 

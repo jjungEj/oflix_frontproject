@@ -1,0 +1,104 @@
+/* 전체 컨테이너 스타일 */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* 헤더 스타일 */
+h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+/* 영화관 선택 드롭다운 스타일 */
+.select-container {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.select-container label {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.schedule-button {
+    display: flex;  /* 수평으로 배치 */
+    justify-content: end;  /* 가운데 정렬 */
+    align-items: center;  /* 수직으로 가운데 정렬 */
+}
+
+select {
+    padding: 10px;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 150px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* 테이블 스타일 */
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-table th,
+.schedule-table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.schedule-table th {
+    background-color: #f4f4f4;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.schedule-table td {
+    font-size: 1rem;
+}
+
+/* 버튼 스타일 */
+.delete-btn {
+    background-color: #000000;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.delete-btn:focus {
+    outline: none;
+}
+
+/* 기본 텍스트 스타일 */
+p {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* 에러 메시지 스타일 */
+.error-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* 빈 테이블 행 스타일 */
+.schedule-table td[colspan="7"] {
+    text-align: center;
+    font-style: italic;
+    color: #888;
+}

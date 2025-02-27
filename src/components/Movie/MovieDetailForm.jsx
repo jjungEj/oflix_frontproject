@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Box, Text, Button} from "@chakra-ui/react";
-import "../css/Movie/MovieDetailForm.css";
+import "../css/Movie/movieDetailForm.css";
 import Header from "../Header/Header.jsx";
 // movieDetailForm -> MovieDetailForm
 function MovieDetailForm() {

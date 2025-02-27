@@ -17,7 +17,7 @@ const CreateMovieSchedule = () => {
 
     // ✅ 영화관 목록 가져오기
     useEffect(() => {
-        fetch("http://localhost:8080/api/Allcinemas")
+        fetch("/api/Allcinemas")
             .then(response => response.json())
             .then(data => setCinemas(data))
             .catch(error => console.error("영화관 데이터를 불러오는 중 오류 발생:", error));
@@ -26,7 +26,7 @@ const CreateMovieSchedule = () => {
     // ✅ 선택된 영화관에 따른 상영관 목록 가져오기
     useEffect(() => {
         if (cinemaId) {
-            fetch(`http://localhost:8080/api/theaterHall/cinema/${cinemaId}`)
+            fetch(`/api/theaterHall/cinema/${cinemaId}`)
                 .then(response => response.json())
                 .then(data => setTheaterHalls(data))
                 .catch(error => console.error("상영관 데이터를 불러오는 중 오류 발생:", error));
@@ -35,7 +35,7 @@ const CreateMovieSchedule = () => {
 
     // ✅ 영화 목록 가져오기
     useEffect(() => {
-        fetch("http://localhost:8080/api/AllMovies")
+        fetch("/api/AllMovies")
             .then(response => response.json())
             .then(data => setMovies(data))
             .catch(error => console.error("영화 데이터를 불러오는 중 오류 발생:", error));
@@ -52,7 +52,7 @@ const CreateMovieSchedule = () => {
         };
 
         try {
-            const response = await fetch("http://localhost:8080/api/schedules", {
+            const response = await fetch("/api/schedules", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -62,7 +62,7 @@ const CreateMovieSchedule = () => {
 
             if (response.ok) {
                 alert("영화 스케줄이 성공적으로 등록되었습니다!");
-                navigate("/movieScheduleManagement"); // 등록 후 스케줄 관리 페이지로 이동
+                navigate("/admin/theaters"); // 등록 후 스케줄 관리 페이지로 이동
             } else {
                 alert("영화 스케줄 등록에 실패했습니다. 다시 시도해주세요.");
             }

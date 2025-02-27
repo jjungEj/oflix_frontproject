@@ -11,6 +11,12 @@ const JoinForm = () => {
     nickname: "",
     phoneNumber: "",
   });
+  const [errors, setErrors] = useState({
+    username: "",
+    password: "",
+    nickname: "",
+    phoneNumber: "",
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,8 +26,48 @@ const JoinForm = () => {
     }));
   };
 
+  // 유효성 검사 함수
+  const validateForm = () => {
+    let formErrors = {};
+    let isValid = true;
+
+    // 아이디 유효성 검사 (이메일 형식)
+    const emailPattern = /^\S+@\S+\.\S+$/;
+    if (!emailPattern.test(formData.username)) {
+      formErrors.username = "아이디는 유효한 이메일 형식이어야 합니다.";
+      isValid = false;
+    }
+
+    // 비밀번호 유효성 검사 (8자 이상)
+    if (formData.password.length < 8) {
+      formErrors.password = "비밀번호는 8자 이상이어야 합니다.";
+      isValid = false;
+    }
+
+    // 이름 유효성 검사
+    if (!formData.nickname) {
+      formErrors.nickname = "이름은 필수 입력 항목입니다.";
+      isValid = false;
+    }
+
+    // 전화번호 유효성 검사 (하이픈 없이 10자 또는 11자리 숫자)
+    const phonePattern = /^\d{10,11}$/;
+    if (!phonePattern.test(formData.phoneNumber)) {
+      formErrors.phoneNumber = "전화번호는 하이픈 없이 10자리 또는 11자리 숫자여야 합니다.";
+      isValid = false;
+    }
+
+    setErrors(formErrors);
+    return isValid;
+  };
+
   const handleJoin = async (e) => {
     e.preventDefault();
+
+    // 유효성 검사 실행
+    if (!validateForm()) {
+      return;
+    }
 
     try {
       const response = await fetch("/api/user/join", {
@@ -42,7 +88,6 @@ const JoinForm = () => {
     } catch (error) {
       console.error("회원가입 오류:", error);
     }
-    
   };
 
   return (
@@ -70,10 +115,15 @@ const JoinForm = () => {
               onChange={handleChange}
               required
             />
+            {errors[name] && (
+              <Text fontSize="sm" color="red.500" mt="1">
+                {errors[name]}
+              </Text>
+            )}
           </Box>
         ))}
 
-        <Button colorPalette="red" w="100%" type="submit">
+        <Button colorScheme="red" w="100%" type="submit">
           가입하기
         </Button>
       </VStack>

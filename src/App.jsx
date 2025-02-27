@@ -2,7 +2,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Join from "./pages/Join";
-import MyReservation from "./pages/MyReservation.jsx";
 import Home from "./pages/Home";
 import Admin from "./components/Admin/UsermanagementForm";
 import Reservation from './pages/Reservation';
@@ -55,7 +54,6 @@ function App() {
           <Route path="/reset-password" element={<ResetPassword />} />
 
           <Route path="/mypage" element={<UserMyPage />} /> 
-          <Route path="/mypage/reservations" element={<MyReservation />} /> 
 
           <Route path="/adminpage" element={<Admin />} />
 

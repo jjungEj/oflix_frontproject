@@ -30,6 +30,8 @@ import ResetPassword from "./pages/ResetPassword";
 import UserMyPage from "./pages/UserMyPage";
 import MovieTicketApp from "./pages/MovieTicketApp";
 
+import CreateMovieSchedule from "./pages/CreateMovieSchedule.jsx";
+import MovieScheduleManagement from "./pages/MovieScheduleManagement.jsx";
 
 
 function App() {
@@ -56,6 +58,10 @@ function App() {
           <Route path="/mypage/reservations" element={<MyReservation />} /> 
 
           <Route path="/adminpage" element={<Admin />} />
+
+          <Route path="/createMovieSchedule" element={<CreateMovieSchedule />} /> 
+          <Route path="/admin/theaters" element={<MovieScheduleManagement />} /> 
+
           <Route path="/theaters" element={<MovieTicketApp />} />
         </Routes>
     </Router>

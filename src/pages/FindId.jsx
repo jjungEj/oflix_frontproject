@@ -6,7 +6,7 @@ const FindId = () => {
     return (
         <>
             <Header />
-            <div className='container'>
+            <div>
                 <FindIdForm />
             </div>
         </>

@@ -6,7 +6,7 @@ const UserMyPage = () => {
     return (
         <>
             <Header />
-            <div className='container'>
+            <div>
                 <UserMyPageForm />
             </div>
         </>

@@ -7,7 +7,7 @@ const Join = () => {
     return (
         <>
             <Header />
-            <div className='container'>
+            <div>
                 <JoinForm />
             </div>
         </>

@@ -37,14 +37,16 @@ const JoinForm = () => {
       }
 
       console.log("회원가입 성공!");
+      alert("회원 가입이 완료되었습니다.");
       navigate("/"); // 메인 페이지로 이동
     } catch (error) {
       console.error("회원가입 오류:", error);
     }
+    
   };
 
   return (
-    <Box maxW="400px" mx="auto" mt="50px" p="6" borderWidth="1px" borderRadius="lg" boxShadow="md">
+    <Box maxW="500px" mx="auto" mt="50px" p="6" borderWidth="1px" borderRadius="lg" boxShadow="md" backgroundColor="white">
       <Text fontSize="2xl" fontWeight="bold" textAlign="center" mb="4">
         회원가입
       </Text>
@@ -53,11 +55,11 @@ const JoinForm = () => {
         {[ 
           { label: "아이디", type: "text", name: "username", placeholder: "아이디 입력" },
           { label: "비밀번호", type: "password", name: "password", placeholder: "비밀번호 입력" },
-          { label: "닉네임", type: "text", name: "nickname", placeholder: "닉네임 입력" },
+          { label: "이름", type: "text", name: "nickname", placeholder: "이름 입력" },
           { label: "전화번호", type: "tel", name: "phoneNumber", placeholder: "전화번호 입력" },
         ].map(({ label, type, name, placeholder }) => (
           <Box w="100%" key={name}>
-            <Text fontSize="sm" fontWeight="bold" mb="1">
+            <Text fontSize="sm" fontWeight="bold" mb="1" textAlign="left">
               {label}
             </Text>
             <Input
@@ -71,7 +73,7 @@ const JoinForm = () => {
           </Box>
         ))}
 
-        <Button colorScheme="red" w="100%" type="submit">
+        <Button colorPalette="red" w="100%" type="submit">
           가입하기
         </Button>
       </VStack>

@@ -119,26 +119,29 @@ function MoviemanagementForm() {
 
       {/* 페이지네이션 */}
       <div className="pagination">
-        <button onClick={() => setPage((prev) => Math.max(prev - 1, 0))} disabled={page === 0}>
-          {"<"}
-        </button>
+        <Button onClick={() => setPage((prev) => Math.max(prev - 1, 0))} disabled={page === 0}
+          style={{ marginTop: "10px" }}>
+          이전
+        </Button>
 
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i}
             onClick={() => setPage(i)}
             className={i === page ? "active-page" : ""}
+            style={{ marginTop: "10px" }}
           >
             {i + 1}
           </button>
         ))}
 
-        <button
+        <Button
           onClick={() => setPage((prev) => Math.min(prev + 1, totalPages - 1))}
           disabled={page >= totalPages - 1}
+          style={{ marginTop: "10px" }}
         >
-          {">"}
-        </button>
+          다음
+        </Button>
       </div>
     </div>
   );

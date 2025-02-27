@@ -7,7 +7,7 @@ const ResetPassword = () => {
     return (
         <>
             <Header />
-            <div className='container'>
+            <div>
                 <ResetPasswordForm />
             </div>
         </>

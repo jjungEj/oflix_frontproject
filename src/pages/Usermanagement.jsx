@@ -6,7 +6,7 @@ const Usermanagement = () => {
     return (
         <>
             <Header />
-            <div className='container'>
+            <div>
             <UsermanagementForm />
             </div>
         </>

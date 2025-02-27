@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, Button, Input, VStack, Text, Spinner, HStack } from "@chakra-ui/react";
-import Header from "../Header/Header";
 
 const User = () => {
     const [user, setUser] = useState(null);
+     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: "",
         nickname: "",
@@ -75,23 +76,7 @@ const User = () => {
         }
     };
 
-    const handleLogout = async () => {
-        try {
-          const response = await fetch("/logout", {
-            method: "POST",
-            credentials: "include",
-          });
     
-          if (!response.ok) {
-            throw new Error("로그아웃 실패");
-          }
-    
-          setRole(null);
-          navigate("/");
-        } catch (error) {
-          console.error("로그아웃 실패:", error);
-        }
-      };
     
 
       const handleDeleteUser = async () => {
@@ -108,10 +93,8 @@ const User = () => {
                 throw new Error("회원 탈퇴 실패");
             }
     
-            // 회원 탈퇴 성공하면 기존 handleLogout 실행
-            await handleLogout();
-    
             alert("회원 탈퇴가 완료되었습니다.");
+            navigate('/');
         } catch (error) {
             console.error("회원 탈퇴 실패:", error);
             alert("회원 탈퇴에 실패했습니다.");

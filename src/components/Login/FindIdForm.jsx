@@ -2,10 +2,20 @@ import React, { useState } from "react";
 import { Box, Input, Button, VStack, Text } from "@chakra-ui/react";
 
 const FindIdForm = () => {
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [nickname, setNickname] = useState("");
+  const [formData, setFormData] = useState({
+    phoneNumber: "",
+    nickname: "",
+  });
   const [foundUsername, setFoundUsername] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   const handleFindId = async (event) => {
     event.preventDefault();
@@ -16,7 +26,7 @@ const FindIdForm = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ phoneNumber, nickname }),
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
@@ -34,31 +44,35 @@ const FindIdForm = () => {
   };
 
   return (
-    <Box maxW="400px" mx="auto" mt="50px" p="6" borderWidth="1px" borderRadius="lg" boxShadow="md">
+    <Box maxW="500px" mx="auto" mt="50px" p="6" borderWidth="1px" borderRadius="lg" boxShadow="md" backgroundColor="white">
       <Text fontSize="2xl" fontWeight="bold" textAlign="center" mb="4">
         아이디 찾기
       </Text>
 
-      <VStack spacing="4" as="form" onSubmit={handleFindId}>
-        <Input
-          type="text"
-          placeholder="전화번호 입력"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-          required
-        />
-        <Input
-          type="text"
-          placeholder="닉네임 입력"
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
-          required
-        />
+      <VStack spacing="4" as="form" onSubmit={handleFindId} w="100%">
+        {[
+          { label: "전화번호", type: "text", name: "phoneNumber", placeholder: "전화번호 입력" },
+          { label: "닉네임", type: "text", name: "nickname", placeholder: "닉네임 입력" },
+        ].map(({ label, type, name, placeholder }) => (
+          <Box w="100%" key={name}>
+            <Text fontSize="sm" fontWeight="bold" mb="1" textAlign="left">
+              {label}
+            </Text>
+            <Input
+              type={type}
+              name={name}
+              placeholder={placeholder}
+              value={formData[name]}
+              onChange={handleChange}
+              required
+            />
+          </Box>
+        ))}
 
-        {errorMessage && <Text color="red.500">{errorMessage}</Text>}
-        {foundUsername && <Text color="green.500">{foundUsername}</Text>}
+        {errorMessage && <Text color="red.500" fontSize="sm">{errorMessage}</Text>}
+        {foundUsername && <Text color="green.500" fontSize="sm">{foundUsername}</Text>}
 
-        <Button colorScheme="red" w="100%" type="submit">
+        <Button colorPalette="red" w="100%" type="submit">
           아이디 찾기
         </Button>
       </VStack>

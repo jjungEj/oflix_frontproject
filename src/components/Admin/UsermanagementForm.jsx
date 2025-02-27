@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
-    Box, Button, Text, Heading, Grid, GridItem, HStack 
+    Box, Button, Text, Heading, Grid, GridItem, HStack,
 } from '@chakra-ui/react';
 
 const UsermanagementForm = () => {
@@ -8,11 +8,16 @@ const UsermanagementForm = () => {
     const [error, setError] = useState(null); // 에러 상태
     const [editUserId, setEditUserId] = useState(null); // 수정 중인 유저 ID
     const [selectedRole, setSelectedRole] = useState({}); // 변경할 역할 상태
+    const [page, setPage] = useState(0); // 현재 페이지
+    const [size, setSize] = useState(10); // 페이지 크기
+    const [totalPages, setTotalPages] = useState(0); // 총 페이지 수
+    const [sortBy, setSortBy] = useState('username'); // 기본 정렬 기준
+    const [direction, setDirection] = useState('desc'); // 정렬 방향 상태 ('asc' 또는 'desc')
 
     // 유저 정보 가져오기
     const fetchUsers = async () => {
         try {
-            const response = await fetch('/api/admin/alluser', {
+            const response = await fetch(`/api/admin/alluser?page=${page}&size=${size}&sortBy=${sortBy}&direction=${direction}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
             });
@@ -22,7 +27,8 @@ const UsermanagementForm = () => {
             }
 
             const data = await response.json();
-            setUsers(data);
+            setUsers(Array.isArray(data.content) ? data.content : []); // 페이지 데이터는 content에 있음
+            setTotalPages(data.totalPages || 0); // 총 페이지 수 업데이트
         } catch (err) {
             setError(err.message);
         }
@@ -75,20 +81,65 @@ const UsermanagementForm = () => {
         }
     };
 
+    // 정렬 기준 변경 시 처리
+    const handleSortChange = (e) => {
+        setSortBy(e.target.value);
+    };
+
+    // 정렬 방향 변경 시 처리
+    const handleDirectionChange = (e) => {
+        setDirection(e.target.value);
+    };
+
     useEffect(() => {
         fetchUsers();
-    }, []);
+    }, [page, size, sortBy, direction]); // page, size, sortBy, direction이 변경될 때마다 유저 데이터를 가져옵니다.
 
     return (
+        <div className="container">
         <Box p={4}>
-            <Heading as="h1" size="lg" mb={4}>Admin Page</Heading>
-            <Text mb={4}>관리자 페이지입니다.</Text>
+            <Heading as="h1" size="lg" mb={4}>회원 관리</Heading>
 
             {error && (
                 <Box mb={4} color="red.500">
                     <Text>{error}</Text>
                 </Box>
             )}
+
+            {/* 정렬 기준 선택 드롭다운 */}
+            <div style={{ marginBottom: '16px', display: 'flex', alignItems: 'center' }}>
+                <span>정렬 기준:</span>
+                <select 
+                    value={sortBy} 
+                    onChange={handleSortChange} 
+                    style={{
+                        marginLeft: '8px',
+                        padding: '8px',
+                        borderRadius: '5px',
+                        border: '1px solid #ccc',
+                        fontSize: '14px',
+                    }}
+                >
+                    <option value="username">이름순</option>
+                    <option value="id">아이디순</option>
+                </select>
+
+                <span style={{ marginLeft: '16px' }}>정렬 방향:</span>
+                <select 
+                    value={direction} 
+                    onChange={handleDirectionChange} 
+                    style={{
+                        marginLeft: '8px',
+                        padding: '8px',
+                        borderRadius: '5px',
+                        border: '1px solid #ccc',
+                        fontSize: '14px',
+                    }}
+                >
+                    <option value="asc">오름차순</option>
+                    <option value="desc">내림차순</option>
+                </select>
+            </div>
 
             <Grid templateColumns="repeat(6, 1fr)" gap={6} mb={6}>
                 <GridItem><Text fontWeight="bold">ID</Text></GridItem>
@@ -146,7 +197,25 @@ const UsermanagementForm = () => {
             ) : (
                 <Text>등록된 유저가 없습니다.</Text>
             )}
+
+            {/* 페이지네이션 버튼 */}
+            <HStack mt={4}>
+                <Button 
+                    onClick={() => setPage(prevPage => Math.max(prevPage - 1, 0))}
+                    isDisabled={page === 0}
+                >
+                    이전
+                </Button>
+                <Text>{page + 1} / {totalPages}</Text>
+                <Button 
+                    onClick={() => setPage(prevPage => Math.min(prevPage + 1, totalPages - 1))}
+                    isDisabled={page === totalPages - 1}
+                >
+                    다음
+                </Button>
+            </HStack>
         </Box>
+        </div>
     );
 };
 

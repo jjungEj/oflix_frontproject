@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../css/header.css";
+import logo from '../../oflix.png';
 
 const Header = () => {
   const [role, setRole] = useState(null); // 권한 상태
@@ -53,22 +54,19 @@ const Header = () => {
         <div className="header_content_contents">
           <h1 className="header_logo">
             <Link to="/" className="header_logo_link">
-              <img src="" alt="OFlixLogo" className="header_logo_image" />
+              <img src={logo} alt="OFlixLogo" className="header_logo_image" />
             </Link>
-            <span className="header_logo_text">OFlix!</span>
+            {/* <span className="header_logo_text">OFlix!</span> */}
           </h1>
 
           <ul className="member_info_wrap">
-            <li className="member_info_item">
+            {/* <li className="member_info_item">
               <Link to="/" className="member_info_link">메인페이지</Link>
-            </li>
+            </li> */}
 
             {/* 로그인 상태에 따른 UI 변경 */}
             {role === "ROLE_ADMIN" ? (
               <>
-                <li className="member_info_item">
-                  <Link to="/admin" className="member_info_link">어드민 페이지</Link>
-                </li>
                 <li className="member_info_item">
                   <button className="logout-button" onClick={handleLogout}>로그아웃</button>
                 </li>

@@ -27,12 +27,12 @@ h1 {
 }
 
 .schedule-button {
-    display: flex;  /* 수평으로 배치 */
-    justify-content: end;  /* 가운데 정렬 */
-    align-items: center;  /* 수직으로 가운데 정렬 */
+    display: flex;  
+    justify-content: end; 
+    align-items: center;  
 }
 
-select {
+.select-container select {
     padding: 10px;
     font-size: 1rem;
     width: 100%;

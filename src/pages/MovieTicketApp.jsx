@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import MovieScheduleList from "./MovieScheduleList";
 import axios from "axios";
-
-const API_BASE_URL = "http://localhost:8080/api";
+import Header from "../components/Header/Header";
 
 // ✅ 모든 극장 정보 가져오기
 const getCinemas = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/cinemas`, {
+    const response = await fetch(`api/cinemas`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       mode: "cors",
@@ -62,42 +61,45 @@ const MovieTicketApp = () => {
 
   return (
     <Container>
-      <Title>전체 극장</Title>
+      <Header />
+      <MainContent>
+        <Title>전체 극장</Title>
 
-      <RegionTab>
-        {regions.map((region) => (
-          <RegionButton
-            key={region}
-            active={selectedRegion === region ? "true" : "false"}
-            onClick={() => handleRegionClick(region)}
-          >
-            {region}
-          </RegionButton>
-        ))}
-      </RegionTab>
+        <RegionTab>
+          {regions.map((region) => (
+            <RegionButton
+              key={region}
+              active={selectedRegion === region ? "true" : "false"}
+              onClick={() => handleRegionClick(region)}
+            >
+              {region}
+            </RegionButton>
+          ))}
+        </RegionTab>
 
-      {selectedRegion && (
-        <TheaterListContainer>
-          <TheaterGrid>
-            {cinemas.length > 0 ? (
-              cinemas.map((theater) => (
-                <TheaterColumn
-                  key={theater.id}
-                  onClick={() => setSelectedTheaterHallId(theater.id)}
-                >
-                  {theater.name}
-                </TheaterColumn>
-              ))
-            ) : (
-              <NoData>해당 지역에 극장이 없습니다.</NoData>
-            )}
-          </TheaterGrid>
-        </TheaterListContainer>
-      )}
+        {selectedRegion && (
+          <TheaterListContainer>
+            <TheaterGrid>
+              {cinemas.length > 0 ? (
+                cinemas.map((theater) => (
+                  <TheaterColumn
+                    key={theater.id}
+                    onClick={() => setSelectedTheaterHallId(theater.id)}
+                  >
+                    {theater.name}
+                  </TheaterColumn>
+                ))
+              ) : (
+                <NoData>해당 지역에 극장이 없습니다.</NoData>
+              )}
+            </TheaterGrid>
+          </TheaterListContainer>
+        )}
 
-      {selectedTheaterHallId && (
-        <MovieScheduleList theaterHallId={selectedTheaterHallId} />
-      )}
+        {selectedTheaterHallId && (
+          <MovieScheduleList theaterHallId={selectedTheaterHallId} />
+        )}
+      </MainContent>
     </Container>
   );
 };
@@ -106,6 +108,10 @@ export default MovieTicketApp;
 
 // ✅ Styled Components
 const Container = styled.div`
+  width: 100%;
+`;
+
+const MainContent = styled.div`
   width: 80%;
   margin: auto;
   padding: 20px;

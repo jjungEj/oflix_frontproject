@@ -3,12 +3,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../components/css/MovieScheduleList.css";
 
-const API_BASE_URL = "http://localhost:8080/api";
-
-// ✅ 특정 극장의 상영 일정 가져오기
 const getSchedulesByTheater = async (theaterHallId) => {
-  const response = await axios.get(`${API_BASE_URL}/schedules/theater`, {
-    params: { theaterHallId }, // ✅ 날짜 없이 극장 ID만 전달
+  const response = await axios.get("api/schedules/theater", {
+    params: { theaterHallId },
   });
   return response.data;
 };
@@ -19,18 +16,16 @@ const MovieScheduleList = ({ theaterHallId }) => {
 
   useEffect(() => {
     if (theaterHallId) {
-      console.log(`🔍 Fetching schedules for Theater: ${theaterHallId}`);
 
       getSchedulesByTheater(theaterHallId)
         .then((response) => {
-          console.log("📢 Fetched schedules:", response);
+          console.log("Fetched schedules:", response);
           setSchedules(response);
         })
         .catch((err) => console.error("Error fetching schedules:", err));
     }
-  }, [theaterHallId]); // ✅ 극장 ID 변경 시 새 데이터 요청
+  }, [theaterHallId]);
 
-  // ✅ 영화별로 일정 그룹화
   const groupedSchedules = schedules.reduce((acc, schedule) => {
     if (!acc[schedule.title]) {
       acc[schedule.title] = [];
@@ -39,7 +34,6 @@ const MovieScheduleList = ({ theaterHallId }) => {
     return acc;
   }, {});
 
-  // ✅ 예매 페이지 이동 함수
   const handleReservation = (scheduleId) => {
     navigate(`/reservation?scheduleId=${scheduleId}`);
   };

@@ -58,6 +58,6 @@
 
 ## 📸 로고 이미지
 
-![SDZ 로고](https://raw.githubusercontent.com/jjungEj/oflix_frontproject/main/assets/logo.png)
+![SDZ 로고](./assets/logo.png)
 
 

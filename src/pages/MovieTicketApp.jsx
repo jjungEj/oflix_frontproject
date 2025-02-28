@@ -7,7 +7,7 @@ import Header from "../components/Header/Header";
 // ✅ 모든 극장 정보 가져오기
 const getCinemas = async () => {
   try {
-    const response = await fetch(`api/cinemas`, {
+    const response = await fetch("/api/cinemas", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       mode: "cors",

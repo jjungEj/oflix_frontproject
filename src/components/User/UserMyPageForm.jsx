@@ -5,46 +5,37 @@ import MyReservation from "../Reservation/MyReservation";
 
 const User = () => {
   const [user, setUser] = useState(null);
+  const [activeTab, setActiveTab] = useState("userInfo"); // Keeps track of the active tab
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    username: "",
-    nickname: "",
-    phoneNumber: "",
-  });
 
-  const fetchUserInfo = async () => {
-    try {
-      const response = await fetch("/api/user/userInfo", {
-        method: "GET",
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        throw new Error("유저 정보 불러오기 실패");
-      }
-
-      const data = await response.json();
-      setUser(data);
-      setFormData({
-        username: data.username,
-        nickname: data.nickname,  // nickname이 null일 경우 빈 문자열로 설정
-        phoneNumber: data.phoneNumber,  // phoneNumber가 null일 경우 빈 문자열로 설정
-      });
-    } catch (error) {
-      console.error("유저 정보 불러오기 실패:", error);
-    }
-  };
-
-  // useEffect에서 빈 배열만 사용하여 컴포넌트가 마운트 될 때만 실행되도록 설정
   useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await fetch("/api/user/userInfo", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (!response.ok) {
+          throw new Error("유저 정보 불러오기 실패");
+        }
+
+        const data = await response.json();
+        setUser(data);
+        console.log(data);
+      } catch (error) {
+        console.error("유저 정보 불러오기 실패:", error);
+      }
+    };
+
     fetchUserInfo();
-  }, []);  // 빈 배열로 설정하여 한 번만 호출되게 함
+  }, []);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
+    setUser((prevUser) => ({
+      ...prevUser,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
   const handleUpdate = async () => {
@@ -55,15 +46,13 @@ const User = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(user),
       });
 
       if (!response.ok) {
         throw new Error("유저 정보 업데이트 실패");
       }
 
-      const updatedUser = await response.json();
-      setUser(updatedUser);
       alert("유저 정보가 성공적으로 업데이트되었습니다.");
     } catch (error) {
       console.error("유저 정보 업데이트 실패:", error);
@@ -93,72 +82,105 @@ const User = () => {
   };
 
   return (
-    <Box className="container" p={5} maxW="lg" mx="auto">
+    <Box maxW={activeTab === "reservation" ? "1200px" : "lg"} backgroundColor="white" p={5} mx="auto " boxShadow="md">
       <Text fontSize="2xl" mb={4} fontWeight="bold" textAlign="center">
         내 정보
       </Text>
 
-      {user ? (
+      <HStack justify="center" spacing={4} mb={4}>
+        <Button
+          variant={activeTab === "userInfo" ? "solid" : "outline"}
+          colorScheme="blue"
+          onClick={() => setActiveTab("userInfo")}
+        >
+          회원 정보
+        </Button>
+        <Button
+          variant={activeTab === "reservation" ? "solid" : "outline"}
+          colorScheme="blue"
+          onClick={() => setActiveTab("reservation")}
+        >
+          예매 정보
+        </Button>
+        <Button
+          variant={activeTab === "accountManagement" ? "solid" : "outline"}
+          colorScheme="blue"
+          onClick={() => setActiveTab("accountManagement")}
+        >
+          계정 관리
+        </Button>
+      </HStack>
+
+      
+      {activeTab === "userInfo" && (
         <VStack spacing={6} align="stretch">
-          <Text fontSize="lg" fontWeight="bold">
-            사용자명: {user.username}
+          {user ? (
+            <>
+              <Text fontSize="lg" fontWeight="bold">
+                사용자명: {user.username}
+              </Text>
+
+              <HStack spacing={4}>
+                <Text fontWeight="bold" minWidth="100px">
+                  닉네임:
+                </Text>
+                <Input
+                  name="nickname"
+                  value={user?.nickname ?? ""}
+                  onChange={handleChange}
+                  placeholder="닉네임을 입력하세요"
+                  size="sm"
+                />
+              </HStack>
+
+              <HStack spacing={4}>
+                <Text fontWeight="bold" minWidth="100px">
+                  전화번호:
+                </Text>
+                <Input
+                  name="phoneNumber"
+                  value={user?.phoneNumber ?? ""}
+                  onChange={handleChange}
+                  placeholder="전화번호를 입력하세요"
+                  size="sm"
+                />
+              </HStack>
+
+              <HStack spacing={4} justify="center">
+                <Button colorScheme="blue" onClick={handleUpdate} size="sm">
+                  수정하기
+                </Button>
+              </HStack>
+            </>
+          ) : (
+            <Text>유저 정보를 불러오는 중...</Text>
+          )}
+        </VStack>
+      )}
+
+      {activeTab === "reservation" && (
+        <Box mt={6}>
+          <MyReservation />
+        </Box>
+      )}
+
+      {activeTab === "accountManagement" && (
+        <VStack spacing={6} align="center">
+          <Text fontSize="lg" fontWeight="bold" textAlign="center">
+            정말로 회원 탈퇴를 하시겠습니까?
+          </Text>
+          <Text fontSize="md" textAlign="center" color="gray.600">
+            회원 탈퇴 후에는 모든 데이터가 삭제되며, 복구할 수 없습니다.
           </Text>
 
-          <HStack spacing={4}>
-            <Text fontWeight="bold" minWidth="100px">
-              닉네임:
-            </Text>
-            <Input
-              name="nickname"
-              value={formData.nickname || ""}  // value가 null이 아닌 빈 문자열로 설정
-              onChange={handleChange}
-              placeholder="닉네임을 입력하세요"
-              size="sm"
-            />
-          </HStack>
-
-          <HStack spacing={4}>
-            <Text fontWeight="bold" minWidth="100px">
-              전화번호:
-            </Text>
-            <Input
-              name="phoneNumber"
-              value={formData.phoneNumber || ""}  // value가 null이 아닌 빈 문자열로 설정
-              onChange={handleChange}
-              placeholder="전화번호를 입력하세요"
-              size="sm"
-            />
-          </HStack>
-
-          <HStack spacing={4} justify="flex-start">
-            <Button
-              colorScheme="blue"
-              onClick={handleUpdate}
-              size="sm"
-              alignSelf="flex-start"
-            >
-              수정하기
-            </Button>
-          </HStack>
-
-          <Box mt={6}>
-            <MyReservation />
-          </Box>
-
-          <HStack spacing={4} justify="flex-start">
-            <Button
-              colorScheme="red"
-              onClick={handleDeleteUser}
-              size="sm"
-              alignSelf="flex-start"
-            >
+          <HStack spacing={4} justify="center" mt={6}>
+            <Button colorScheme="red" onClick={handleDeleteUser} size="lg">
               회원 탈퇴
             </Button>
           </HStack>
         </VStack>
-      ) : (
-        <Text>유저 정보를 불러오는 중...</Text>
       )}
+
     </Box>
   );
 };

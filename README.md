@@ -1,5 +1,7 @@
+
+## 📸 로고 이미지
+![oflix 로고](https://raw.githubusercontent.com/jjungEj/oflix_frontproject/main/src/assets/oflix.png)
 ## **📌 프로젝트: 재해석한 O!Flix**
-![oflix 로고](https://raw.githubusercontent.com/jjungEj/oflix_frontproject/src/assets/oflix.png)
 
 🎬 **담당 역할:** 영화 도메인 개발
 

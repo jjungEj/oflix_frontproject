@@ -1,6 +1,5 @@
 ## **📌 프로젝트: 재해석한 O!Flix**
-![SDZ 로고](https://raw.githubusercontent.com/jjungEj/oflix_frontproject/src/assets/oflix.png)
-
+![oflix 로고](https://raw.githubusercontent.com/jjungEj/oflix_frontproject/src/assets/oflix.png)
 
 🎬 **담당 역할:** 영화 도메인 개발
 
